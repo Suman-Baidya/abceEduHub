@@ -126,14 +126,14 @@ export function SettingsForm({ settings }: { settings: any }) {
         </div>
 
         {/* ROW 2: Content (Premium Minimalist Cards) */}
-        <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto">
+        <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto px-4 sm:px-6">
           
           <TabsContent value="branding" className="mt-0 w-full focus-visible:outline-none">
             <Accordion defaultValue={[]} className="space-y-6">
               
               {/* 1. Visual Identity */}
-              <AccordionItem value="identity" className="border border-border/50 bg-card/50 rounded-3xl px-8 overflow-hidden">
-                <AccordionTrigger className="hover:no-underline py-8">
+              <AccordionItem value="identity" className="border border-border/50 bg-card/50 rounded-3xl overflow-hidden">
+                <AccordionTrigger className="hover:no-underline py-8 px-6 sm:px-8">
                   <div className="flex items-center gap-4 text-left">
                     <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                       <Palette className="w-6 h-6" />
@@ -144,7 +144,7 @@ export function SettingsForm({ settings }: { settings: any }) {
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="pb-8 space-y-10">
+                <AccordionContent className="pb-8 px-6 sm:px-8 space-y-10">
                   <div className="space-y-3">
                     <Label htmlFor="siteName" className="text-sm font-semibold text-foreground/80">Site Name</Label>
                     <Input id="siteName" value={siteName || ""} onChange={(e) => setSiteName(e.target.value)} placeholder="Enter site name" className="h-12 bg-background border-border/40 rounded-2xl" />
@@ -189,8 +189,8 @@ export function SettingsForm({ settings }: { settings: any }) {
               </AccordionItem>
 
               {/* 2. Global Contact Info */}
-              <AccordionItem value="contact" className="border border-border/50 bg-card/50 rounded-3xl px-8 overflow-hidden">
-                <AccordionTrigger className="hover:no-underline py-8">
+              <AccordionItem value="contact" className="border border-border/50 bg-card/50 rounded-3xl overflow-hidden">
+                <AccordionTrigger className="hover:no-underline py-8 px-6 sm:px-8">
                   <div className="flex items-center gap-4 text-left">
                     <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center">
                       <Phone className="w-6 h-6" />
@@ -201,7 +201,7 @@ export function SettingsForm({ settings }: { settings: any }) {
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="pb-8 space-y-8">
+                <AccordionContent className="pb-8 px-6 sm:px-8 space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <Label className="text-sm font-semibold text-foreground/80">Support Email</Label>
@@ -231,8 +231,8 @@ export function SettingsForm({ settings }: { settings: any }) {
               </AccordionItem>
 
               {/* 3. Social Presence */}
-              <AccordionItem value="social" className="border border-border/50 bg-card/50 rounded-3xl px-8 overflow-hidden">
-                <AccordionTrigger className="hover:no-underline py-8">
+              <AccordionItem value="social" className="border border-border/50 bg-card/50 rounded-3xl overflow-hidden">
+                <AccordionTrigger className="hover:no-underline py-8 px-6 sm:px-8">
                   <div className="flex items-center gap-4 text-left">
                     <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center">
                       <Globe className="w-6 h-6" />
@@ -243,7 +243,7 @@ export function SettingsForm({ settings }: { settings: any }) {
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="pb-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <AccordionContent className="pb-8 px-6 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                   {['facebook', 'twitter', 'instagram', 'linkedin', 'youtube'].map((platform) => (
                     <div key={platform} className="space-y-2">
                       <Label className="text-xs font-bold uppercase tracking-widest">{platform}</Label>
@@ -259,8 +259,8 @@ export function SettingsForm({ settings }: { settings: any }) {
               </AccordionItem>
 
               {/* 4. Navbar Configuration (NEW) */}
-              <AccordionItem value="navbar" className="border border-border/50 bg-card/50 rounded-3xl px-8 overflow-hidden">
-                <AccordionTrigger className="hover:no-underline py-8">
+              <AccordionItem value="navbar" className="border border-border/50 bg-card/50 rounded-3xl overflow-hidden">
+                <AccordionTrigger className="hover:no-underline py-8 px-6 sm:px-8">
                   <div className="flex items-center gap-4 text-left">
                     <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
                       <Menu className="w-6 h-6" />
@@ -271,7 +271,7 @@ export function SettingsForm({ settings }: { settings: any }) {
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="pb-10 space-y-12">
+                <AccordionContent className="pb-10 px-6 sm:px-8 space-y-12">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="flex items-center justify-between p-5 bg-background rounded-2xl border border-border/40">
                       <span className="text-sm font-bold">Show Navbar</span>
@@ -433,6 +433,7 @@ export function SettingsForm({ settings }: { settings: any }) {
 function SectionEditor({ section, settings }: { section: any, settings: any }) {
   const [isActive, setIsActive] = useState(section.isActive);
   const [title, setTitle] = useState(section.title);
+  const [subtitle, setSubtitle] = useState(section.subtitle);
   const [isSaving, setIsSaving] = useState(false);
   const [content, setContent] = useState(section.content || {});
   const [isExpanded, setIsExpanded] = useState(false);
@@ -442,6 +443,7 @@ function SectionEditor({ section, settings }: { section: any, settings: any }) {
     const result = await updateLandingSection(section.id, {
       ...section,
       title,
+      subtitle,
       isActive,
       content,
     });
@@ -450,7 +452,7 @@ function SectionEditor({ section, settings }: { section: any, settings: any }) {
   };
 
   return (
-    <div className={`p-4 rounded-[2rem] border transition-all duration-300 ${isActive ? 'bg-white dark:bg-zinc-900 border-border/60 shadow-sm' : 'bg-muted/30 border-transparent opacity-60'}`}>
+    <div className={`p-6 sm:p-8 rounded-[2rem] border transition-all duration-300 ${isActive ? 'bg-white dark:bg-zinc-900 border-border/60 shadow-sm' : 'bg-muted/30 border-transparent opacity-60'}`}>
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'bg-primary/10 text-primary' : 'bg-zinc-200 dark:bg-zinc-800 text-muted-foreground'}`}>
@@ -494,7 +496,7 @@ function SectionEditor({ section, settings }: { section: any, settings: any }) {
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Section Tagline</Label>
-                <Input value={section.subtitle || ""} className="h-12 rounded-2xl bg-muted/5 border-none" />
+                <Input value={subtitle || ""} onChange={(e) => setSubtitle(e.target.value)} className="h-12 rounded-2xl bg-muted/5 border-none" />
               </div>
             </div>
 
@@ -537,7 +539,16 @@ function HeroContentEditor({ content, setContent }: any) {
       <div className="flex items-center justify-between">
         <Label className="text-sm font-black uppercase text-primary tracking-widest">Slide Management</Label>
         <Button variant="outline" size="sm" className="rounded-lg h-8 text-xs font-bold" onClick={() => {
-          const newSlides = [...(content.slides || []), { src: "", tagline: "New Adventure", title: "New Slide", subtitle: "Description...", primaryButtonText: "Get Started", primaryButtonLink: "#" }];
+          const newSlides = [...(content.slides || []), { 
+            src: "", 
+            tagline: "New Adventure", 
+            title: "New Slide", 
+            subtitle: "Description...", 
+            primaryButtonText: "Get Started", 
+            primaryButtonLink: "#",
+            secondaryButtonText: "Book a Demo",
+            secondaryButtonLink: "#"
+          }];
           setContent({ ...content, slides: newSlides });
         }}>Add Slide</Button>
       </div>
@@ -575,12 +586,22 @@ function HeroContentEditor({ content, setContent }: any) {
             </div>
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-primary">Button Label</Label>
+                <Label className="text-[10px] uppercase font-bold text-primary">Primary Button Label</Label>
                 <Input value={slide.primaryButtonText || ""} onChange={(e) => { const n = [...content.slides]; n[idx].primaryButtonText = e.target.value; setContent({ ...content, slides: n }); }} placeholder="e.g. Get Started" className="h-9 text-xs" />
               </div>
               <div className="space-y-1">
-                <Label className="text-[10px] uppercase font-bold text-primary">Button Link</Label>
+                <Label className="text-[10px] uppercase font-bold text-primary">Primary Button Link</Label>
                 <Input value={slide.primaryButtonLink || ""} onChange={(e) => { const n = [...content.slides]; n[idx].primaryButtonLink = e.target.value; setContent({ ...content, slides: n }); }} placeholder="e.g. /register" className="h-9 text-xs" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Secondary Button Label</Label>
+                <Input value={slide.secondaryButtonText || ""} onChange={(e) => { const n = [...content.slides]; n[idx].secondaryButtonText = e.target.value; setContent({ ...content, slides: n }); }} placeholder="e.g. Book a Demo" className="h-9 text-xs" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Secondary Button Link</Label>
+                <Input value={slide.secondaryButtonLink || ""} onChange={(e) => { const n = [...content.slides]; n[idx].secondaryButtonLink = e.target.value; setContent({ ...content, slides: n }); }} placeholder="e.g. /contact" className="h-9 text-xs" />
               </div>
             </div>
           </div>
@@ -620,6 +641,15 @@ function AboutContentEditor({ content, setContent }: any) {
             itemFields={['label', 'value', 'suffix', 'color']} 
           />
           <p className="text-[10px] text-muted-foreground mt-2 px-2 italic">Color options: text-primary, text-blue-600, text-pink-600, text-zinc-500</p>
+       </div>
+
+       <div className="pt-8 border-t border-border/30">
+          <ListContentEditor 
+            title="Core Features" 
+            content={{ items: (content.features || []).map((i: string) => ({ text: i })) }} 
+            setContent={(newContent: any) => setContent({ ...content, features: newContent.items.map((i: any) => i.text) })} 
+            itemFields={['text']} 
+          />
        </div>
     </div>
   );

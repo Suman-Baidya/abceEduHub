@@ -12,6 +12,7 @@ import {
   Zap,
   Target
 } from "lucide-react";
+import Image from "next/image";
 
 const ICON_MAP: any = {
   shield: ShieldCheck,
@@ -95,10 +96,11 @@ export function ServicesSection({ data }: { data?: any }) {
 
           <div className="flex-1 relative">
             <div className="relative rounded-[2.5rem] overflow-hidden aspect-video shadow-2xl z-10 border border-white dark:border-zinc-800">
-              <img
-                src={lms.image}
+              <Image
+                src={lms.image || ""}
                 alt={lms.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-primary/10 backdrop-blur-[1px]"></div>
             </div>

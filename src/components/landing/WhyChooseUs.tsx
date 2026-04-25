@@ -1,4 +1,5 @@
 import { Zap, ShieldCheck, Cpu, Globe, Rocket, Brain, GraduationCap, Users, Layout } from "lucide-react";
+import Image from "next/image";
 
 const FEATURES = [
   {
@@ -36,6 +37,8 @@ export function WhyChooseUs({ data }: { data?: any }) {
     { icon: "Zap", title: "Blazing Fast Edge Tech", description: "Built on Next.js 15, ensuring immediate load times globally on any mobile device or tablet." }
   ];
 
+  const image = content.image || "https://cdn.pixabay.com/photo/2015/09/22/14/37/key-951783_1280.jpg";
+
   const iconMap: any = { Zap, ShieldCheck, Cpu, Globe, Rocket, Brain, GraduationCap, Users, Layout };
 
   return (
@@ -44,7 +47,7 @@ export function WhyChooseUs({ data }: { data?: any }) {
         {/* Features Grid */}
         <div className="flex-1 order-2 lg:order-1">
           <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/5 border border-primary/20 text-primary font-bold text-[10px] tracking-[0.2em] uppercase mb-4 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse"></span>
             {subtitle}
           </div>
           <h2 className="text-4xl lg:text-5xl font-extrabold mt-3 tracking-tight leading-tight">
@@ -73,10 +76,11 @@ export function WhyChooseUs({ data }: { data?: any }) {
         {/* Feature Image */}
         <div className="flex-1 order-1 lg:order-2 w-full">
           <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-2xl">
-            <img
-              src="https://cdn.pixabay.com/photo/2015/09/22/14/37/key-951783_1280.jpg"
-              alt="Unlock potential"
-              className="w-full h-full object-cover"
+            <Image
+              src={image || ""}
+              alt={title}
+              fill
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
           </div>

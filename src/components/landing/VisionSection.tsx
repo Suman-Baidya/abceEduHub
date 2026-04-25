@@ -1,4 +1,5 @@
 import { Eye, Rocket, Sparkles, Globe, Target, Zap } from "lucide-react";
+import Image from "next/image";
 
 const ICON_MAP: any = {
   rocket: Rocket,
@@ -66,10 +67,11 @@ export function VisionSection({ data }: { data?: any }) {
         {/* Image Side */}
         <div className="flex-1 order-1 lg:order-2 relative group">
           <div className="relative rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl z-10 border-4 border-white dark:border-zinc-800">
-            <img 
-              src={image} 
+            <Image 
+              src={image || ""} 
               alt={title} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-bl from-primary/30 to-transparent mix-blend-overlay"></div>
           </div>

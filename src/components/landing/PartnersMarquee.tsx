@@ -1,3 +1,4 @@
+import Image from "next/image";
 export function PartnersMarquee({ data }: { data?: any }) {
    const content = data?.content || {};
    const subtitle = data?.subtitle || "Trusted Innovators";
@@ -14,7 +15,7 @@ export function PartnersMarquee({ data }: { data?: any }) {
       <section className="py-16 bg-white dark:bg-zinc-950 border-y border-border overflow-hidden">
          <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
             <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/5 border border-primary/20 text-primary font-bold text-[10px] tracking-[0.2em] uppercase mb-4 shadow-sm">
-               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+               <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse"></span>
                {subtitle}
             </div>
          </div>
@@ -23,11 +24,12 @@ export function PartnersMarquee({ data }: { data?: any }) {
             <div className="flex w-max animate-marquee">
                {/* Ensure at least a decent number of logos for a smooth loop */}
                {[...logos, ...logos, ...logos].map((logo, index) => (
-                  <div key={index} className="flex-shrink-0 w-[250px] md:w-[250px] flex justify-center items-center px-4 py-4">
-                     <img
-                        src={logo}
+                  <div key={index} className="flex-shrink-0 w-[250px] md:w-[250px] flex justify-center items-center px-4 py-4 relative h-20 md:h-24">
+                     <Image
+                        src={logo || ""}
                         alt={`Partner ${index}`}
-                        className="h-20 md:h-24 object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 drop-shadow-sm hover:drop-shadow-xl hover:scale-110"
+                        fill
+                        className="object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 drop-shadow-sm hover:drop-shadow-xl hover:scale-110"
                      />
                   </div>
                ))}

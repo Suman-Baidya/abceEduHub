@@ -12,22 +12,38 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 const HERO_SLIDES = [
   {
     src: "https://cdn.pixabay.com/photo/2022/07/21/02/53/business-idea-7335270_1280.jpg",
+    tagline: "Welcome to ABCD Edu Hub",
     title: "Innovative AI Automation",
-    subtitle: "Streamline workflows, boost efficiency, reduce effort, empower intelligent decisions."
+    subtitle: "Streamline workflows, boost efficiency, reduce effort, empower intelligent decisions.",
+    primaryButtonText: "Get Started",
+    primaryButtonLink: "/register",
+    secondaryButtonText: "Book a Demo",
+    secondaryButtonLink: "/contact"
   },
   {
     src: "https://cdn.pixabay.com/photo/2018/03/10/12/00/teamwork-3213924_1280.jpg",
+    tagline: "Empower Your Team",
     title: "Empower Your Educational Team",
-    subtitle: "Foster collaboration, provide tools, encourage growth, cultivate supportive culture."
+    subtitle: "Foster collaboration, provide tools, encourage growth, cultivate supportive culture.",
+    primaryButtonText: "Join Us",
+    primaryButtonLink: "/about",
+    secondaryButtonText: "Our Services",
+    secondaryButtonLink: "/services"
   },
   {
     src: "https://cdn.pixabay.com/photo/2024/11/19/03/43/handshake-9208017_1280.jpg",
+    tagline: "Build Partnerships",
     title: "Forge Powerful Partnerships",
-    subtitle: "Forge powerful partnerships by cultivating trust, aligning shared goals, and driving innovation together"
+    subtitle: "Forge powerful partnerships by cultivating trust, aligning shared goals, and driving innovation together.",
+    primaryButtonText: "Book a Demo",
+    primaryButtonLink: "/contact",
+    secondaryButtonText: "Learn More",
+    secondaryButtonLink: "/about"
   }
 ];
 
@@ -54,7 +70,13 @@ const itemVariants: Variants = {
 }
 
 export function HeroSection({ data }: { data?: any }) {
-  const slides = data?.content?.slides || HERO_SLIDES;
+  const rawSlides = data?.content?.slides || HERO_SLIDES;
+
+  // Merge each slide with its default counterpart or general defaults
+  const slides = rawSlides.map((slide: any, index: number) => ({
+    ...HERO_SLIDES[index % HERO_SLIDES.length],
+    ...slide
+  }));
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [api, setApi] = React.useState<any>();
 
@@ -85,12 +107,18 @@ export function HeroSection({ data }: { data?: any }) {
             <CarouselItem key={index} className="pl-0 overflow-hidden relative h-screen min-h-[600px] w-full basis-full">
               {/* Background Image with advanced darkening gradient overlay */}
               <motion.div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${slide.src})` }}
+                className="absolute inset-0"
                 initial={{ scale: 1.1 }}
                 animate={{ scale: currentIndex === index ? 1 : 1.1 }}
                 transition={{ duration: 6, ease: "easeOut" }}
               >
+                <Image
+                  src={slide.src || ""}
+                  alt={slide.title || "Hero Image"}
+                  fill
+                  priority={index === 0}
+                  className="object-cover object-center"
+                />
                 {/* Cinematic dark overlays to ensure text pops perfectly */}
                 <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/95 via-zinc-950/70 to-transparent"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-zinc-950/30"></div>
@@ -130,33 +158,33 @@ export function HeroSection({ data }: { data?: any }) {
 
                       <motion.div variants={itemVariants} className="mt-12 flex flex-col sm:flex-row gap-5 items-start">
                         {slide.primaryButtonText ? (
-                          <a 
+                          <a
                             href={slide.primaryButtonLink || "#"}
                             className={cn(
                               buttonVariants({ size: "lg" }),
-                              "h-14 w-full sm:w-[220px] text-lg bg-white text-zinc-950 hover:bg-zinc-200 border-none shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:-translate-y-1 transition-all duration-300 group rounded-xl font-extrabold flex items-center justify-center"
+                              "h-14 w-full sm:w-[220px] text-lg bg-white text-zinc-950 hover:bg-zinc-200 border-none shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:-translate-y-1 transition-all duration-300 group rounded-xl font-extrabold flex items-center justify-center hover:text-white"
                             )}
                           >
                             {slide.primaryButtonText}
                           </a>
                         ) : (
-                          <Button size="lg" className="h-14 w-full sm:w-[220px] text-lg bg-white text-zinc-950 hover:bg-zinc-200 border-none shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:-translate-y-1 transition-all duration-300 group rounded-xl font-extrabold">
+                          <Button size="lg" className="h-14 w-full sm:w-[220px] text-lg bg-white text-zinc-950 hover:bg-zinc-200 border-none shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:-translate-y-1 transition-all duration-300 group rounded-xl font-extrabold hover:text-white">
                             Get Started
                           </Button>
                         )}
 
                         {slide.secondaryButtonText ? (
-                          <a 
+                          <a
                             href={slide.secondaryButtonLink || "#"}
                             className={cn(
                               buttonVariants({ variant: "outline", size: "lg" }),
-                              "h-14 w-full sm:w-[220px] text-lg bg-white/5 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 rounded-xl font-bold shadow-lg hover:-translate-y-1 flex items-center justify-center"
+                              "h-14 w-full sm:w-[220px] text-lg bg-white/5 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 rounded-xl font-bold shadow-lg hover:-translate-y-1 flex items-center justify-center hover:text-white"
                             )}
                           >
                             {slide.secondaryButtonText}
                           </a>
                         ) : (
-                          <Button size="lg" variant="outline" className="h-14 w-full sm:w-[220px] text-lg bg-white/5 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 rounded-xl font-bold shadow-lg hover:-translate-y-1">
+                          <Button size="lg" variant="outline" className="h-14 w-full sm:w-[220px] text-lg bg-white/5 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 rounded-xl font-bold shadow-lg hover:-translate-y-1 hover:text-white">
                             Book a Demo
                           </Button>
                         )}
