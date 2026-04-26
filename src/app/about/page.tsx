@@ -36,12 +36,15 @@ export default async function AboutPage() {
       <LandingNavbar settings={settings} />
 
       <main className="flex-1">
-        <PageHeader
-          title="About ABCD Edu Hub"
-          subtitle="Pioneering the future of educational management through AI-driven innovation."
-          bgImage="https://cdn.pixabay.com/photo/2023/10/10/05/52/website-8305451_1280.jpg"
-          breadcrumb="About Us"
-        />
+        {isSectionActive("page-header-about") && (
+          <PageHeader
+            data={getSectionData("page-header-about")}
+            title="About ABCD Edu Hub"
+            subtitle="Pioneering the future of educational management through AI-driven innovation."
+            bgImage="https://cdn.pixabay.com/photo/2023/10/10/05/52/website-8305451_1280.jpg"
+            breadcrumb="About Us"
+          />
+        )}
 
         {isSectionActive("about") && <AboutSection data={getSectionData("about")} />}
         {isSectionActive("our-message") && <OurMessage data={getSectionData("our-message")} />}

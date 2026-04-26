@@ -111,6 +111,8 @@ export function SettingsForm({ settings }: { settings: any }) {
               { value: "branding", label: "Branding & Contact", icon: Palette },
               { value: "navigation", label: "Navigation", icon: Globe },
               { value: "sections", label: "Sections", icon: Layout },
+              { value: "page-headers", label: "Page Headers", icon: LayoutDashboard },
+              { value: "legal-pages", label: "Legal Pages", icon: ShieldCheck },
             ].map((tab) => (
               <TabsTrigger
                 key={tab.value}
@@ -405,7 +407,7 @@ export function SettingsForm({ settings }: { settings: any }) {
                  variant="outline" 
                  size="sm" 
                  onClick={async () => {
-                   const types = ['hero', 'about', 'why-choose-us', 'achievements', 'partners', 'our-message', 'mission', 'vision', 'services', 'guide-steps', 'guide-resources', 'ready-to-modernize', 'custom-solution', 'pricing', 'testimonials', 'faq', 'contact'];
+                   const types = ['hero', 'about', 'why-choose-us', 'achievements', 'partners', 'our-message', 'mission', 'vision', 'services', 'guide-steps', 'guide-resources', 'ready-to-modernize', 'custom-solution', 'pricing', 'testimonials', 'faq', 'contact', 'page-header-about', 'page-header-services', 'page-header-guide', 'page-header-pricing', 'page-header-support', 'legal-privacy-policy', 'legal-terms-conditions', 'legal-cookie-policy', 'legal-refund-policy', 'legal-sitemap'];
                    const res = await syncAllSections(settings.id, types);
                    if (res.success) {
                      toast.success(res.created ? `Initialized ${res.created} new sections!` : "All sections are already synced.");
@@ -418,7 +420,65 @@ export function SettingsForm({ settings }: { settings: any }) {
                </Button>
              </div>
             <div className="space-y-4">
-                {settings.sections?.map((section: any) => (
+                {settings.sections?.filter((s: any) => !s.type.startsWith('page-header-') && !s.type.startsWith('legal-')).map((section: any) => (
+                  <SectionEditor key={section.id} section={section} settings={settings} />
+                ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="page-headers" className="mt-0 w-full space-y-8 focus-visible:outline-none">
+             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+               <div className="flex flex-col gap-1">
+                 <h2 className="text-2xl font-bold tracking-tight">Page Headers</h2>
+                 <p className="text-muted-foreground text-sm">Manage the top sections of your internal pages.</p>
+               </div>
+               <Button 
+                 variant="outline" 
+                 size="sm" 
+                 onClick={async () => {
+                   const types = ['hero', 'about', 'why-choose-us', 'achievements', 'partners', 'our-message', 'mission', 'vision', 'services', 'guide-steps', 'guide-resources', 'ready-to-modernize', 'custom-solution', 'pricing', 'testimonials', 'faq', 'contact', 'page-header-about', 'page-header-services', 'page-header-guide', 'page-header-pricing', 'page-header-support', 'legal-privacy-policy', 'legal-terms-conditions', 'legal-cookie-policy', 'legal-refund-policy', 'legal-sitemap'];
+                   const res = await syncAllSections(settings.id, types);
+                   if (res.success) {
+                     toast.success(res.created ? `Initialized ${res.created} new sections!` : "All sections are already synced.");
+                     if (res.created) window.location.reload();
+                   }
+                 }}
+                 className="rounded-2xl h-12 px-6 gap-3 border-primary/20 text-primary hover:bg-primary/5 font-black shadow-lg shadow-primary/5 active:scale-95 transition-all"
+               >
+                 <Plus className="h-5 w-5" /> Sync Missing Sections
+               </Button>
+             </div>
+            <div className="space-y-4">
+                {settings.sections?.filter((s: any) => s.type.startsWith('page-header-') && !s.type.includes('privacy') && !s.type.includes('terms') && !s.type.includes('cookie') && !s.type.includes('refund') && !s.type.includes('sitemap')).map((section: any) => (
+                  <SectionEditor key={section.id} section={section} settings={settings} />
+                ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="legal-pages" className="mt-0 w-full space-y-8 focus-visible:outline-none">
+             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+               <div className="flex flex-col gap-1">
+                 <h2 className="text-2xl font-bold tracking-tight">Legal & Policy Pages</h2>
+                 <p className="text-muted-foreground text-sm">Manage your Privacy Policy, Terms, and other legal documents.</p>
+               </div>
+               <Button 
+                 variant="outline" 
+                 size="sm" 
+                 onClick={async () => {
+                   const types = ['hero', 'about', 'why-choose-us', 'achievements', 'partners', 'our-message', 'mission', 'vision', 'services', 'guide-steps', 'guide-resources', 'ready-to-modernize', 'custom-solution', 'pricing', 'testimonials', 'faq', 'contact', 'page-header-about', 'page-header-services', 'page-header-guide', 'page-header-pricing', 'page-header-support', 'legal-privacy-policy', 'legal-terms-conditions', 'legal-cookie-policy', 'legal-refund-policy', 'legal-sitemap', 'page-header-privacy-policy', 'page-header-terms-conditions', 'page-header-cookie-policy', 'page-header-refund-policy', 'page-header-sitemap'];
+                   const res = await syncAllSections(settings.id, types);
+                   if (res.success) {
+                     toast.success(res.created ? `Initialized ${res.created} new sections!` : "All sections are already synced.");
+                     if (res.created) window.location.reload();
+                   }
+                 }}
+                 className="rounded-2xl h-12 px-6 gap-3 border-primary/20 text-primary hover:bg-primary/5 font-black shadow-lg shadow-primary/5 active:scale-95 transition-all"
+               >
+                 <Plus className="h-5 w-5" /> Sync Missing Sections
+               </Button>
+             </div>
+            <div className="space-y-4">
+                {settings.sections?.filter((s: any) => s.type.startsWith('legal-')).map((section: any) => (
                   <SectionEditor key={section.id} section={section} settings={settings} />
                 ))}
             </div>
@@ -495,8 +555,19 @@ function SectionEditor({ section, settings }: { section: any, settings: any }) {
                 <Input value={title || ""} onChange={(e) => setTitle(e.target.value)} className="h-12 rounded-2xl bg-muted/5 border-none" />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Section Tagline</Label>
-                <Input value={subtitle || ""} onChange={(e) => setSubtitle(e.target.value)} className="h-12 rounded-2xl bg-muted/5 border-none" />
+                <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+                  {section.type.startsWith('page-header-') ? "Page Description" : "Section Tagline"}
+                </Label>
+                {section.type.startsWith('page-header-') ? (
+                  <Textarea 
+                    value={subtitle || ""} 
+                    onChange={(e) => setSubtitle(e.target.value)} 
+                    className="min-h-[100px] rounded-2xl bg-muted/5 border-none resize-none" 
+                    placeholder="Enter page description..."
+                  />
+                ) : (
+                  <Input value={subtitle || ""} onChange={(e) => setSubtitle(e.target.value)} className="h-12 rounded-2xl bg-muted/5 border-none" />
+                )}
               </div>
             </div>
 
@@ -519,6 +590,8 @@ function SectionEditor({ section, settings }: { section: any, settings: any }) {
                {section.type === 'custom-solution' && <CustomSolutionContentEditor content={content} setContent={setContent} />}
                {section.type === 'pricing' && <PricingContentEditor content={content} setContent={setContent} />}
                {section.type === 'contact' && <ContactContentEditor content={content} setContent={setContent} settings={settings} />}
+               {section.type.startsWith('page-header-') && <PageHeaderContentEditor content={content} setContent={setContent} />}
+               {section.type.startsWith('legal-') && <LegalContentEditor content={content} setContent={setContent} />}
             </div>
 
             <div className="flex justify-end">
@@ -925,6 +998,79 @@ function ServicesContentEditor({ content, setContent }: any) {
              />
              <p className="text-[10px] text-muted-foreground mt-2 px-2 italic">Icons: shield, briefcase, wallet, users, graduation, heart, globe, zap, target</p>
           </div>
+       </div>
+    </div>
+  );
+}
+
+function PageHeaderContentEditor({ content, setContent }: any) {
+  return (
+    <div className="space-y-8">
+       <ImageUpload 
+         value={content.bgImage || ""} 
+         onChange={(url) => setContent({ ...content, bgImage: url })} 
+         label="Header Background Image" 
+         folder="ABCDEdutHub/headers" 
+       />
+       <div className="space-y-2">
+          <Label className="text-[10px] uppercase font-bold text-muted-foreground">Breadcrumb Text</Label>
+          <Input 
+            value={content.breadcrumb || ""} 
+            onChange={(e) => setContent({ ...content, breadcrumb: e.target.value })} 
+            placeholder="e.g. About Us"
+          />
+       </div>
+    </div>
+  );
+}
+
+function LegalContentEditor({ content, setContent }: any) {
+  return (
+    <div className="space-y-12">
+       {/* Header Controls */}
+       <div className="space-y-6 bg-primary/5 p-8 rounded-[2rem] border border-primary/10">
+         <h4 className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+           <LayoutDashboard className="h-4 w-4" /> Header Customization
+         </h4>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <ImageUpload 
+              value={content.bgImage || ""} 
+              onChange={(url) => setContent({ ...content, bgImage: url })} 
+              label="Page Background Image" 
+              folder="ABCDEdutHub/legal" 
+            />
+            <div className="space-y-3 justify-end flex flex-col">
+              <Label className="text-[10px] uppercase font-bold text-muted-foreground ml-1">Breadcrumb Text</Label>
+              <Input 
+                value={content.breadcrumb || ""} 
+                onChange={(e) => setContent({ ...content, breadcrumb: e.target.value })} 
+                placeholder="e.g. Privacy Policy"
+                className="h-12 rounded-2xl bg-white border-none"
+              />
+            </div>
+         </div>
+       </div>
+
+       {/* Content Controls */}
+       <div className="space-y-8">
+         <div className="space-y-3">
+            <Label className="text-[10px] uppercase font-bold text-muted-foreground">Last Updated Date</Label>
+            <Input 
+              value={content.lastUpdated || ""} 
+              onChange={(e) => setContent({ ...content, lastUpdated: e.target.value })} 
+              placeholder="e.g. October 2023"
+              className="h-12 rounded-2xl bg-muted/5 border-none"
+            />
+         </div>
+         <div className="space-y-3">
+            <Label className="text-[10px] uppercase font-bold text-muted-foreground">Page Content (HTML supported)</Label>
+            <Textarea 
+              value={content.html || ""} 
+              onChange={(e) => setContent({ ...content, html: e.target.value })} 
+              className="min-h-[400px] font-mono text-sm rounded-3xl bg-muted/5 p-6 border-none"
+              placeholder="<h1>Privacy Policy</h1><p>Your privacy is important to us...</p>"
+            />
+         </div>
        </div>
     </div>
   );

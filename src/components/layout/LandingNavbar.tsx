@@ -140,7 +140,7 @@ export function LandingNavbar({ settings }: { settings?: any }) {
                   if (fallback) fallback.classList.remove('hidden');
                 }}
               />
-              <div className="logo-fallback hidden w-full h-full bg-primary text-primary-foreground flex items-center justify-center font-black text-lg">
+              <div className="logo-fallback hidden w-full h-full bg-primary text-black dark:text-white flex items-center justify-center font-black text-lg">
                 {siteName.charAt(0)}
               </div>
             </div>

@@ -33,12 +33,15 @@ export default async function SupportPage() {
       <LandingNavbar settings={settings} />
       
       <main className="flex-1">
-        <PageHeader 
-          title="Support Center"
-          subtitle="Our dedicated team is here to ensure your institution's digital journey is smooth and successful."
-          bgImage="https://cdn.pixabay.com/photo/2026/02/09/09/10/mv-fotos-woman-10113152_1280.png"
-          breadcrumb="Support"
-        />
+        {isSectionActive("page-header-support") && (
+          <PageHeader 
+            data={getSectionData("page-header-support")}
+            title="Support Center"
+            subtitle="Our dedicated team is here to ensure your institution's digital journey is smooth and successful."
+            bgImage="https://cdn.pixabay.com/photo/2026/02/09/09/10/mv-fotos-woman-10113152_1280.png"
+            breadcrumb="Support"
+          />
+        )}
 
         <div className="bg-zinc-50 dark:bg-transparent">
           {isSectionActive("contact") && <ContactSection data={getSectionData("contact")} settings={settings} />}

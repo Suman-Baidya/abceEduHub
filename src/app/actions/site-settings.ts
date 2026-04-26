@@ -95,14 +95,39 @@ export async function syncAllSections(settingsId: string, sectionTypes: string[]
     if (missingTypes.length === 0) return { success: true, created: 0 };
 
     await Promise.all(missingTypes.map((type, index) => {
+      let defaultContent = {};
+      let title = type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+      if (type.startsWith('legal-')) {
+        const pageName = title.replace('Legal ', '');
+        let html = `<h1>${pageName}</h1><p>Welcome to our ${pageName}. We are committed to protecting your interests and providing transparent information.</p>`;
+        
+        if (type.includes('privacy')) {
+          html = `<h1>Privacy Policy</h1><p>Last updated: ${new Date().toLocaleDateString()}</p><h2>1. Information We Collect</h2><p>We collect information you provide directly to us, such as when you create an account, use our services, or communicate with us.</p><h2>2. How We Use Information</h2><p>We use the information we collect to provide, maintain, and improve our services, and to communicate with you.</p><h2>3. Information Sharing</h2><p>We do not share your personal information with third parties except as described in this policy.</p>`;
+        } else if (type.includes('terms')) {
+          html = `<h1>Terms & Conditions</h1><p>Last updated: ${new Date().toLocaleDateString()}</p><h2>1. Acceptance of Terms</h2><p>By accessing or using our services, you agree to be bound by these Terms and Conditions.</p><h2>2. Use of Services</h2><p>You agree to use our services only for lawful purposes and in accordance with these terms.</p><h2>3. Limitation of Liability</h2><p>In no event shall we be liable for any indirect, incidental, special, consequential, or punitive damages.</p>`;
+        } else if (type.includes('cookie')) {
+          html = `<h1>Cookie Policy</h1><p>Last updated: ${new Date().toLocaleDateString()}</p><h2>1. What Are Cookies</h2><p>Cookies are small text files that are placed on your device when you visit a website.</p><h2>2. How We Use Cookies</h2><p>We use cookies to understand how you use our website and to improve your experience.</p><h2>3. Your Choices</h2><p>You can choose to disable cookies through your browser settings.</p>`;
+        } else if (type.includes('refund')) {
+          html = `<h1>Refund Policy</h1><p>Last updated: ${new Date().toLocaleDateString()}</p><h2>1. Refund Eligibility</h2><p>Refunds are generally provided for services that have not yet been rendered or in case of technical failures on our part.</p><h2>2. Refund Process</h2><p>To request a refund, please contact our support team with your order details.</p><h2>3. Non-Refundable Items</h2><p>Certain services or products may be non-refundable once accessed or used.</p>`;
+        } else if (type.includes('sitemap')) {
+          html = `<h1>Site Map</h1><p>Explore all the pages available on our platform.</p><ul><li><a href="/">Home</a></li><li><a href="/about">About Us</a></li><li><a href="/services">Services</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/guide">User Guide</a></li><li><a href="/support">Support Center</a></li></ul>`;
+        }
+
+        defaultContent = {
+          lastUpdated: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+          html
+        };
+      }
+
       return db.landingSection.create({
         data: {
           siteSettingsId: settingsId,
           type,
-          title: type.charAt(0).toUpperCase() + type.slice(1),
-          isActive: false,
+          title,
+          isActive: true, // Auto-enable legal pages
           order: existingSections.length + index,
-          content: {}
+          content: defaultContent
         }
       });
     }));

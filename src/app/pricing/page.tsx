@@ -34,12 +34,15 @@ export default async function PricingPage() {
       <LandingNavbar settings={settings} />
 
       <main className="flex-1 bg-background">
-        <PageHeader
-          title="Pricing Plans"
-          subtitle="Transparent, flexible pricing designed to scale with your institute's growth."
-          bgImage="https://cdn.pixabay.com/photo/2019/09/27/17/02/rupee-4508945_1280.jpg"
-          breadcrumb="Pricing"
-        />
+        {isSectionActive("page-header-pricing") && (
+          <PageHeader
+            data={getSectionData("page-header-pricing")}
+            title="Pricing Plans"
+            subtitle="Transparent, flexible pricing designed to scale with your institute's growth."
+            bgImage="https://cdn.pixabay.com/photo/2019/09/27/17/02/rupee-4508945_1280.jpg"
+            breadcrumb="Pricing"
+          />
+        )}
 
         {isSectionActive("pricing") && <PricingSection data={getSectionData("pricing")} />}
         {isSectionActive("custom-solution") && <CustomSolution data={getSectionData("custom-solution")} />}

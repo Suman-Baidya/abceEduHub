@@ -34,12 +34,15 @@ export default async function ServicesPage() {
       <LandingNavbar settings={settings} />
 
       <main className="flex-1">
-        <PageHeader
-          title="Our Services"
-          subtitle="Comprehensive digital solutions tailored for modern educational excellence."
-          bgImage="https://cdn.pixabay.com/photo/2016/11/22/21/26/notebook-1850613_1280.jpg"
-          breadcrumb="Services"
-        />
+        {isSectionActive("page-header-services") && (
+          <PageHeader
+            data={getSectionData("page-header-services")}
+            title="Our Services"
+            subtitle="Comprehensive digital solutions tailored for modern educational excellence."
+            bgImage="https://cdn.pixabay.com/photo/2016/11/22/21/26/notebook-1850613_1280.jpg"
+            breadcrumb="Services"
+          />
+        )}
         {isSectionActive("services") && <ServicesSection data={getSectionData("services")} />}
         {isSectionActive("why-choose-us") && <WhyChooseUs data={getSectionData("why-choose-us")} />}
         {isSectionActive("ready-to-modernize") && <ReadyToModernize data={getSectionData("ready-to-modernize")} />}

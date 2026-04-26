@@ -33,12 +33,15 @@ export default async function GuidePage() {
       <LandingNavbar settings={settings} />
 
       <main className="flex-1">
-        <PageHeader
-          title="User Guide"
-          subtitle="Everything you need to know about navigating and mastering the ABCD Edu Hub ecosystem."
-          bgImage="https://cdn.pixabay.com/photo/2026/03/15/04/29/geralt-presentation-10174584_1280.jpg"
-          breadcrumb="Guide"
-        />
+        {isSectionActive("page-header-guide") && (
+          <PageHeader
+            data={getSectionData("page-header-guide")}
+            title="User Guide"
+            subtitle="Everything you need to know about navigating and mastering the ABCD Edu Hub ecosystem."
+            bgImage="https://cdn.pixabay.com/photo/2026/03/15/04/29/geralt-presentation-10174584_1280.jpg"
+            breadcrumb="Guide"
+          />
+        )}
 
         {isSectionActive("guide-steps") && <GuideSteps data={getSectionData("guide-steps")} />}
         {isSectionActive("guide-resources") && <GuideResources data={getSectionData("guide-resources")} />}
