@@ -14,12 +14,32 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
   const params = useParams();
   const pathname = usePathname();
   
-  // Robust tenant detection: prioritize prop, then params, then pathname
-  const tenant = propTenant || (params.tenant as string) || (pathname.startsWith('/app/') ? pathname.split('/')[2] : "");
+  // Robust tenant detection
+  const getTenant = () => {
+    if (propTenant) return propTenant;
+    if (params?.tenant) return params.tenant as string;
+    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
+    
+    // Client-side fallback for subdomains
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
+        return parts[0];
+      }
+      // Special case for tenant.localhost
+      if (hostname.endsWith('.localhost')) {
+        return hostname.replace('.localhost', '');
+      }
+    }
+    return "";
+  };
 
-  // Determine if we are in subdirectory mode (/app/tenant/...) or subdomain mode (tenant.domain.com/...)
+  const tenant = getTenant();
   const isSubdirectoryMode = pathname.startsWith('/app/');
-  const workspaceBase = isSubdirectoryMode ? `/app/${tenant}` : '';
+  const workspaceBase = (isSubdirectoryMode && tenant) ? `/app/${tenant}` : '';
+  const adminBase = isSubdirectoryMode ? `${workspaceBase}/admin` : "/admin";
+  const rootHref = isSubdirectoryMode ? `${workspaceBase}/` : "/";
 
   const siteName = settings?.siteName || "Institute Portal";
   const logoUrl = settings?.logoUrl || "/logo.png";
@@ -69,7 +89,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* Brand Column */}
           <div className="space-y-8">
-            <Link href="/" className="flex items-center gap-3 shrink-0 group w-fit">
+            <Link href={rootHref} className="flex items-center gap-3 shrink-0 group w-fit">
               <div className="relative w-12 h-12 flex items-center justify-center shrink-0 bg-white/5 rounded-2xl overflow-hidden border border-white/10 p-1 group-hover:border-primary/50 transition-all">
                 <Image
                   src={logoUrl}
@@ -90,6 +110,13 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
                 {siteName}
               </span>
             </Link>
+            {tenant && (
+              <Link href={adminBase}>
+                <Button variant="ghost" size="sm" className="text-[10px] font-bold tracking-widest text-white hover:bg-white/10 h-8">
+                  DASHBOARD
+                </Button>
+              </Link>
+            )}
 
             <p className="text-[15px] leading-relaxed text-zinc-400 font-medium">
               {brandDescription}
@@ -123,7 +150,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
             </div>
             <div className="flex flex-col gap-4">
               {navLinks.map((link: any) => {
-                const href = `${workspaceBase}${link.href === '/' ? '' : link.href}`;
+                const href = link.href === '/' ? rootHref : `${workspaceBase}${link.href.startsWith('/') ? link.href : `/${link.href}`}`;
                 return (
                   <Link key={link.id} href={href} className="text-zinc-400 hover:text-primary font-bold text-[15px] transition-all flex items-center gap-2 group">
                     <ArrowRight className="w-3 h-3 text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-all" /> 
@@ -147,7 +174,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
                 { name: 'Terms of Service', href: '/legal/terms' },
                 { name: 'Cookie Policy', href: '/legal/cookie' }
               ].map((item) => {
-                const href = `${workspaceBase}${item.href}`;
+                const href = item.href === '/' ? rootHref : `${workspaceBase}${item.href.startsWith('/') ? item.href : `/${item.href}`}`;
                 return (
                   <Link key={item.name} href={href} className="text-zinc-400 hover:text-primary font-bold text-[15px] transition-all flex items-center gap-2 group">
                      <ArrowRight className="w-3 h-3 text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-all" /> 

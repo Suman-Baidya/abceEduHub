@@ -149,7 +149,7 @@ export default async function InstituteLandingPage({
         accentColor={mergedSettings.accentColor || undefined} 
         fontFamily={mergedSettings.fontFamily || undefined} 
       />
-      <WorkspaceNavbar settings={mergedSettings} user={session?.user} />
+      <WorkspaceNavbar settings={mergedSettings} user={session?.user} tenant={tenant} />
 
       <main className="flex-1 w-full flex flex-col relative overflow-hidden bg-white dark:bg-zinc-950">
         {/* Advanced Background Layer */}

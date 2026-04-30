@@ -33,7 +33,7 @@ export default async function WorkspaceStudentsPage({
         fontFamily={workspace.siteSettings.fontFamily || undefined} 
       />
       
-      <WorkspaceNavbar settings={workspace.siteSettings} user={session?.user} />
+      <WorkspaceNavbar settings={workspace.siteSettings} user={session?.user} tenant={tenant} />
 
       <main className="flex-1 w-full">
         <WorkspacePageHeader 

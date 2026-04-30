@@ -28,14 +28,33 @@ export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
   const pathname = usePathname();
   const params = useParams();
   
-  // Robust tenant detection: prioritize prop, then params, then pathname
-  const tenant = propTenant || (params.tenant as string) || (pathname.startsWith('/app/') ? pathname.split('/')[2] : "");
+  // Robust tenant detection
+  const getTenant = () => {
+    if (propTenant) return propTenant;
+    if (params?.tenant) return params.tenant as string;
+    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
+    
+    // Client-side fallback for subdomains
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
+        return parts[0];
+      }
+      // Special case for tenant.localhost
+      if (hostname.endsWith('.localhost')) {
+        return hostname.replace('.localhost', '');
+      }
+    }
+    return "";
+  };
+
+  const tenant = getTenant();
   const displayTenant = tenant || "Workspace";
 
   // Determine if we are in subdirectory mode (/app/tenant/...) or subdomain mode (tenant.domain.com/...)
-  // If the pathname starts with /app/, we are in subdirectory mode.
   const isSubdirectoryMode = pathname.startsWith('/app/');
-  const adminBase = isSubdirectoryMode ? `/app/${tenant}/admin` : `/admin`;
+  const adminBase = (isSubdirectoryMode && tenant) ? `/app/${tenant}/admin` : `/admin`;
 
   const navItems = [
     { name: "Overview", href: adminBase, icon: LayoutDashboard },

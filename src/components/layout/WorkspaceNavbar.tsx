@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Phone,
@@ -18,12 +18,40 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any }) {
+export function WorkspaceNavbar({ settings, user, tenant: propTenant }: { settings: any, user?: any, tenant?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const params = useParams();
   const { theme, setTheme } = useTheme();
+
+  // Robust tenant detection
+  const getTenant = () => {
+    if (propTenant) return propTenant;
+    if (params?.tenant) return params.tenant as string;
+    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
+    
+    // Client-side fallback for subdomains
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
+        return parts[0];
+      }
+      // Special case for tenant.localhost
+      if (hostname.endsWith('.localhost')) {
+        return hostname.replace('.localhost', '');
+      }
+    }
+    return "";
+  };
+
+  const tenant = getTenant();
+  const isSubdirectoryMode = pathname.startsWith('/app/');
+  const workspaceBase = (isSubdirectoryMode && tenant) ? `/app/${tenant}` : '';
+  const adminBase = (isSubdirectoryMode && tenant) ? `${workspaceBase}/admin` : "/admin";
+  const rootHref = isSubdirectoryMode ? `${workspaceBase}/` : "/";
 
   useEffect(() => {
     setMounted(true);
@@ -124,15 +152,15 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
             className="w-full bg-white/5 backdrop-blur-xl border-b border-white/5 py-4 overflow-hidden"
           >
             <div className="container mx-auto px-6 flex items-center justify-between">
-              <div className="flex items-center gap-5">
-                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20">
+              <Link href={rootHref} className="flex items-center gap-5 group">
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/20 group-hover:scale-105 transition-transform">
                   <span className="text-primary-foreground font-black text-2xl tracking-tighter">A</span>
                 </div>
                 <div className="flex flex-col">
-                  <h1 className="text-2xl font-black text-white leading-none uppercase">{settings.siteName || "WORKSPACE"}</h1>
+                  <h1 className="text-2xl font-black text-white leading-none uppercase group-hover:text-primary transition-colors">{settings.siteName || "WORKSPACE"}</h1>
                   <p className="text-[10px] text-primary font-bold tracking-widest mt-1">Computer Education Institute</p>
                 </div>
-              </div>
+              </Link>
 
               <div className="flex items-center gap-6">
                 {settings.secondaryLogo && settings.secondaryLogo !== "" && (
@@ -141,7 +169,7 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
                 <div className="flex items-center gap-3 pl-6 border-l border-white/10">
                   {user ? (
                     <div className="flex items-center gap-4">
-                      <Link href="/admin">
+                      <Link href={adminBase}>
                         <Button variant="ghost" className="text-xs font-bold tracking-widest text-white hover:bg-white/10">
                           DASHBOARD
                         </Button>
@@ -179,7 +207,7 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
         )}>
           {/* Sticky Left: Branding (Only visible when scrolled) */}
           {isScrolled && (
-            <Link href="/" className="flex items-center gap-3 animate-in fade-in slide-in-from-left-4 duration-500">
+            <Link href={rootHref} className="flex items-center gap-3 animate-in fade-in slide-in-from-left-4 duration-500">
               <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
                 <span className="text-primary-foreground font-black text-xl tracking-tighter">A</span>
               </div>
@@ -188,22 +216,27 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
 
           {/* Middle: Links */}
           <div className="flex items-center gap-8">
-            {visibleNavItems.map((item: any) => (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={cn(
-                  "text-[14px] font-bold transition-all relative group uppercase",
-                  pathname === item.href ? "text-primary" : "text-zinc-400 hover:text-white"
-                )}
-              >
-                {item.name}
-                <span className={cn(
-                  "absolute -bottom-1.5 left-0 h-0.5 bg-primary transition-all duration-500",
-                  pathname === item.href ? "w-full" : "w-0 group-hover:w-full"
-                )} />
-              </Link>
-            ))}
+            {visibleNavItems.map((item: any) => {
+              const href = item.href === '/' ? rootHref : `${workspaceBase}${item.href.startsWith('/') ? item.href : `/${item.href}`}`;
+              const isActive = pathname === href || (item.href === '/' && (pathname === workspaceBase || pathname === `${workspaceBase}/`));
+              
+              return (
+                <Link
+                  key={item.id}
+                  href={href}
+                  className={cn(
+                    "text-[14px] font-bold transition-all relative group uppercase",
+                    isActive ? "text-primary" : "text-zinc-400 hover:text-white"
+                  )}
+                >
+                  {item.name}
+                  <span className={cn(
+                    "absolute -bottom-1.5 left-0 h-0.5 bg-primary transition-all duration-500",
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  )} />
+                </Link>
+              );
+            })}
           </div>
 
           {/* Sticky Right: Actions (Only visible when scrolled) */}
@@ -211,7 +244,7 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
             <div className="flex items-center gap-4 animate-in fade-in slide-in-from-right-4 duration-500">
               {user ? (
                 <div className="flex items-center gap-3">
-                  <Link href="/admin">
+                  <Link href={adminBase}>
                     <Button variant="ghost" size="sm" className="text-[10px] font-bold tracking-widest text-white hover:bg-white/10 h-8">
                       DASHBOARD
                     </Button>
@@ -249,11 +282,19 @@ export function WorkspaceNavbar({ settings, user }: { settings: any, user?: any 
               </Button>
             </div>
             <div className="flex flex-col gap-6">
-              {visibleNavItems.map((item: any) => (
-                <Link key={item.id} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-black text-zinc-500 hover:text-primary transition-colors uppercase tracking-tighter">
-                  {item.name}
-                </Link>
-              ))}
+              {visibleNavItems.map((item: any) => {
+                const href = item.href === '/' ? rootHref : `${workspaceBase}${item.href.startsWith('/') ? item.href : `/${item.href}`}`;
+                return (
+                  <Link 
+                    key={item.id} 
+                    href={href} 
+                    onClick={() => setIsMobileMenuOpen(false)} 
+                    className="text-3xl font-black text-zinc-500 hover:text-primary transition-colors uppercase tracking-tighter"
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         )}

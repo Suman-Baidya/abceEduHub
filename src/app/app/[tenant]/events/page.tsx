@@ -54,7 +54,7 @@ export default async function EventsPage({
         accentColor={workspaceSettings.accentColor || undefined} 
         fontFamily={workspaceSettings.fontFamily || undefined} 
       />
-      <WorkspaceNavbar settings={workspaceSettings} user={session?.user} />
+      <WorkspaceNavbar settings={workspaceSettings} user={session?.user} tenant={tenant} />
 
       <main className="flex-1 w-full">
         <WorkspacePageHeader 
