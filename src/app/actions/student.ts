@@ -16,6 +16,9 @@ export async function getStudentProfile(workspaceId: string) {
         },
         studentProfile: {
           include: {
+            invoices: {
+              orderBy: { date: 'desc' }
+            },
             batch: {
               include: {
                 course: true

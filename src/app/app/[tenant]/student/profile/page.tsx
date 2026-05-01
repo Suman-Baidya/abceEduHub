@@ -19,7 +19,8 @@ export default async function StudentProfilePage({
   const result = await getStudentProfile(workspace.id);
   if (!result.success) redirect(`/app/${tenant}/student/dashboard`);
 
-  const student = result.data;
+  const student = result.data as any;
+  if (!student) redirect(`/app/${tenant}/student/dashboard`);
   const profile = student.studentProfile;
 
   return (
@@ -36,10 +37,10 @@ export default async function StudentProfilePage({
          <div className="space-y-6">
             <Card className="rounded-[3rem] p-10 border-none shadow-2xl bg-white dark:bg-zinc-900 text-center">
                <Avatar className="h-32 w-32 mx-auto ring-8 ring-primary/10 mb-6 shadow-xl">
-                  <AvatarImage src={student.image} />
-                  <AvatarFallback className="text-4xl font-black bg-primary text-white">{student.name?.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={student.image ?? undefined} />
+                  <AvatarFallback className="text-4xl font-black bg-primary text-white">{student.name?.charAt(0) || '?'}</AvatarFallback>
                </Avatar>
-               <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">{student.name}</h3>
+               <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">{student.name || "Unknown"}</h3>
                <p className="text-sm font-bold text-primary uppercase tracking-widest mt-1">Student</p>
                <Badge className="mt-4 rounded-lg font-black text-[9px] uppercase tracking-widest px-3 py-1 bg-emerald-500/10 text-emerald-500 border-none">
                   Verified Profile
@@ -76,7 +77,7 @@ export default async function StudentProfilePage({
                   <ProfileField icon={<User />} label="Full Name" value={student.name} />
                   <ProfileField icon={<Mail />} label="Email Address" value={student.email || "N/A"} />
                   <ProfileField icon={<Phone />} label="Phone Number" value={profile?.phone || "N/A"} />
-                  <ProfileField icon={<Calendar />} label="Date of Birth" value={profile?.dob ? new Date(profile.dob).toLocaleDateString() : "N/A"} />
+                  <ProfileField icon={<Calendar />} label="Date of Birth" value={profile?.dob ? new Date(profile.dob).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : "N/A"} />
                   <ProfileField icon={<MapPin />} label="Address" value={profile?.address ? (typeof profile.address === 'string' ? profile.address : JSON.stringify(profile.address)) : "N/A"} />
                </div>
             </Card>
@@ -104,7 +105,7 @@ export default async function StudentProfilePage({
   );
 }
 
-function ProfileField({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) {
+function ProfileField({ icon, label, value }: { icon: React.ReactNode, label: string, value: string | null | undefined }) {
   return (
     <div className="flex gap-4">
       <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 shrink-0">

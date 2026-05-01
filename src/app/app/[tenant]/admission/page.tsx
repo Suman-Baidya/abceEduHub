@@ -67,7 +67,7 @@ export default async function AdmissionPage({
         breadcrumbs={[
           { name: "Admission", href: `/app/${tenant}/admission` }
         ]}
-        bgImage={workspace.siteSettings.heroImage || undefined}
+        bgImage={workspace.siteSettings.pageHeaderBanner || undefined}
         statusTitle="ENROLL"
         statusSub="Active"
       />

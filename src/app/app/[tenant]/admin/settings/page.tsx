@@ -58,6 +58,7 @@ export default async function WorkspaceSettingsPage({ params }: { params: Promis
         }
       },
       include: {
+        sections: true,
         workspace: {
           include: {
             events: true,

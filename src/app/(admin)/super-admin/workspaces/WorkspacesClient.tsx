@@ -40,11 +40,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { createWorkspace } from "@/app/actions/workspaces";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export default function WorkspacesClient({ initialWorkspaces }: { initialWorkspaces: any[] }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const router = useRouter();
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
   const [isCreating, setIsCreating] = useState(false);
@@ -207,7 +211,7 @@ export default function WorkspacesClient({ initialWorkspaces }: { initialWorkspa
                     {ws.tokensBalance?.toLocaleString() || "0"}
                   </TableCell>
                   <TableCell className="text-right text-xs text-muted-foreground">
-                    {new Date(ws.createdAt).toLocaleDateString()}
+                    {mounted ? new Date(ws.createdAt).toLocaleDateString() : ""}
                   </TableCell>
                     <TableCell>
                       <DropdownMenu>

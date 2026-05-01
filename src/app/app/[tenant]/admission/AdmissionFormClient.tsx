@@ -392,7 +392,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 </div>
                 <div className="space-y-2">
                   <Label>Gender *</Label>
-                  <Select onValueChange={(v) => setValue("gender", v)} value={watch("gender")}>
+                  <Select onValueChange={(v) => setValue("gender", v)} value={watch("gender") as string}>
                     <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Male">Male</SelectItem>
@@ -410,7 +410,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 {!disabledFields.includes("religion") && (
                   <div className="space-y-2">
                     <Label>Religion</Label>
-                    <Select onValueChange={(v) => setValue("religion", v)} value={watch("religion")}>
+                    <Select onValueChange={(v) => setValue("religion", v)} value={watch("religion") as string}>
                       <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Hindu">Hindu</SelectItem>
@@ -427,7 +427,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 {!disabledFields.includes("caste") && (
                   <div className="space-y-2">
                     <Label>Caste Category</Label>
-                    <Select onValueChange={(v) => setValue("caste", v)} value={watch("caste")}>
+                    <Select onValueChange={(v) => setValue("caste", v)} value={watch("caste") as string}>
                       <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="GEN">GEN</SelectItem>

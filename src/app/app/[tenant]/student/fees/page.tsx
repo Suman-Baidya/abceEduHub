@@ -18,7 +18,8 @@ export default async function StudentFeesPage({
   const result = await getStudentProfile(workspace.id);
   if (!result.success) redirect(`/app/${tenant}/student/dashboard`);
 
-  const student = result.data;
+  const student = result.data as any;
+  if (!student) redirect(`/app/${tenant}/student/dashboard`);
   const invoices = student.studentProfile?.invoices || [];
 
   const totalPaid = invoices

@@ -1,13 +1,19 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, BookOpen, Clock, FileText, CheckCircle2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 export default function StudentDashboardClient({ workspaceName, logoUrl, application }: any) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const { data: session } = useSession();
   const pathname = usePathname();
   const params = useParams();
@@ -42,7 +48,7 @@ export default function StudentDashboardClient({ workspaceName, logoUrl, applica
             <div className="flex justify-between items-center">
               <div>
                 <CardTitle className="text-2xl font-black">Enrollment Status</CardTitle>
-                <CardDescription className="text-slate-400 font-medium">Last updated: {new Date().toLocaleDateString()}</CardDescription>
+                <CardDescription className="text-slate-400 font-medium">Last updated: {mounted ? new Date().toLocaleDateString() : ""}</CardDescription>
               </div>
               <div className={`px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest ${
                 application?.status === "APPROVED" ? "bg-emerald-500/20 text-emerald-400" :
@@ -70,7 +76,7 @@ export default function StudentDashboardClient({ workspaceName, logoUrl, applica
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase">Application ID</p>
-                  <p className="font-bold text-slate-900">{application?.applicationNo || session.user?.username}</p>
+                  <p className="font-bold text-slate-900">{application?.applicationNo || (session.user as any)?.username}</p>
                 </div>
               </div>
             </div>
