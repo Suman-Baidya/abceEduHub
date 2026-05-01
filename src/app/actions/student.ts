@@ -23,7 +23,12 @@ export async function getStudentProfile(workspaceId: string) {
               include: {
                 course: true
               }
-            }
+            },
+            attendances: {
+              orderBy: { date: 'desc' },
+              take: 5
+            },
+            admissionApp: true
           }
         }
       }

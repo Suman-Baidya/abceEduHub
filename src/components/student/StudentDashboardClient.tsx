@@ -147,7 +147,7 @@ export default function StudentDashboardClient({ student, tenant, settings, noti
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Enrollment Date</p>
-                    <p className="font-bold text-slate-900 dark:text-white">{new Date(student.createdAt).toLocaleDateString()}</p>
+                    <p className="font-bold text-slate-900 dark:text-white">{new Date(student.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                   </div>
                   <Button variant="outline" className="w-full rounded-2xl font-bold h-12 uppercase text-[11px] tracking-widest gap-2">
                      <User className="w-4 h-4" /> Edit Profile
