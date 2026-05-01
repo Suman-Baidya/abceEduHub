@@ -210,7 +210,7 @@ export default function StudentList({
                   </div>
                   <div className="space-y-2">
                     <Label className="font-bold text-xs uppercase text-slate-500">Gender</Label>
-                    <Select value={formData.gender} onValueChange={val => setFormData({...formData, gender: val})}>
+                    <Select value={(formData.gender as string) || ""} onValueChange={(val: any) => setFormData({...formData, gender: val})}>
                       <SelectTrigger className="rounded-xl h-11">
                         <SelectValue placeholder="Select Gender" />
                       </SelectTrigger>
@@ -275,7 +275,7 @@ export default function StudentList({
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label className="font-bold text-xs uppercase text-slate-500">Assign Batch</Label>
-                    <Select value={formData.batchId} onValueChange={val => setFormData({...formData, batchId: val})}>
+                    <Select value={(formData.batchId as string) || ""} onValueChange={(val: any) => setFormData({...formData, batchId: val})}>
                       <SelectTrigger className="rounded-xl h-11">
                         <SelectValue placeholder="Select a batch" />
                       </SelectTrigger>
@@ -503,7 +503,7 @@ export default function StudentList({
                 </div>
                 <div className="space-y-2">
                   <Label className="font-bold text-xs uppercase text-slate-500">Gender</Label>
-                  <Select value={editFormData.gender} onValueChange={val => setEditFormData({...editFormData, gender: val})}>
+                  <Select onValueChange={(val: any) => setEditFormData({...editFormData, gender: val})} value={(editFormData.gender as string) || ""}>
                     <SelectTrigger className="rounded-xl h-11">
                       <SelectValue placeholder="Select Gender" />
                     </SelectTrigger>
@@ -568,7 +568,7 @@ export default function StudentList({
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label className="font-bold text-xs uppercase text-slate-500">Assign Batch</Label>
-                  <Select value={editFormData.batchId} onValueChange={val => setEditFormData({...editFormData, batchId: val})}>
+                  <Select value={(editFormData.batchId as string) || ""} onValueChange={(val: any) => setEditFormData({...editFormData, batchId: val})}>
                     <SelectTrigger className="rounded-xl h-11">
                       <SelectValue placeholder="Select a batch" />
                     </SelectTrigger>

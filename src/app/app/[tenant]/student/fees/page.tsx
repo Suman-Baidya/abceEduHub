@@ -83,7 +83,7 @@ export default async function StudentFeesPage({
                               </p>
                            </td>
                            <td className="px-10 py-6 text-sm font-medium text-slate-500">
-                              {new Date(invoice.date).toLocaleDateString()}
+                               {new Date(invoice.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                            </td>
                            <td className="px-10 py-6 font-black text-slate-900 dark:text-white">
                               ${invoice.amount.toLocaleString()}

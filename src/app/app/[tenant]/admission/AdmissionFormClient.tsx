@@ -349,7 +349,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                   )}
                   {isOtpSent && !isEmailVerified && (
                     <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
-                      <p className="text-xs font-bold text-center text-primary">A code has been sent to {watch("email")}</p>
+                      <p className="text-xs font-bold text-center text-primary">A code has been sent to {watch("email") as string}</p>
                       <Input maxLength={6} placeholder="000000" value={otp} onChange={(e) => setOtp(e.target.value)} className="h-16 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-primary/50 transition-all font-mono font-black text-center text-3xl tracking-[0.5em]" />
                       <Button type="button" onClick={handleVerifyOtp} disabled={otpLoading || otp.length < 6} className="w-full h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl">
                         {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify & Continue"}
@@ -368,10 +368,10 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                   <Label>Select Course *</Label>
                   <Select onValueChange={(v) => {
                     const selectedCourse = courses?.find((c: any) => c.title === v);
-                    setValue("courseId", selectedCourse?.id || "");
-                    setValue("appliedCourse", v);
+                    setValue("courseId", (selectedCourse as any)?.id || "");
+                    setValue("appliedCourse", v as string);
                     trigger("appliedCourse");
-                  }} value={watch("appliedCourse")}>
+                  }} value={watch("appliedCourse") as string}>
                     <SelectTrigger className={cn("h-14 rounded-2xl bg-slate-50 border-transparent", errors.appliedCourse && "border-red-500")}>
                       <SelectValue placeholder="Choose a course" />
                     </SelectTrigger>
@@ -392,7 +392,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 </div>
                 <div className="space-y-2">
                   <Label>Gender *</Label>
-                  <Select onValueChange={(v) => setValue("gender", v)} value={watch("gender") as string}>
+                  <Select onValueChange={(v) => setValue("gender", v as any)} value={(watch("gender") as string) || ""}>
                     <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Male">Male</SelectItem>
@@ -410,7 +410,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 {!disabledFields.includes("religion") && (
                   <div className="space-y-2">
                     <Label>Religion</Label>
-                    <Select onValueChange={(v) => setValue("religion", v)} value={watch("religion") as string}>
+                    <Select onValueChange={(v) => setValue("religion", v as any)} value={(watch("religion") as string) || ""}>
                       <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Hindu">Hindu</SelectItem>
@@ -427,7 +427,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 {!disabledFields.includes("caste") && (
                   <div className="space-y-2">
                     <Label>Caste Category</Label>
-                    <Select onValueChange={(v) => setValue("caste", v)} value={watch("caste") as string}>
+                    <Select onValueChange={(v) => setValue("caste", v as any)} value={(watch("caste") as string) || ""}>
                       <SelectTrigger className="h-12 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="GEN">GEN</SelectItem>
