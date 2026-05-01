@@ -1,4 +1,4 @@
-import { db } from "./src/lib/prisma";
+import { db } from "../src/lib/prisma";
 
 async function checkSections() {
   const sections = await db.landingSection.findMany();
