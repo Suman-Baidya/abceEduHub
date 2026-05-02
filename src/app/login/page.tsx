@@ -16,13 +16,12 @@ export default async function LoginPage() {
   const headersList = await headers();
   const host = headersList.get("host") || "";
   
+  const localDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
+  
   // Detect tenant from subdomain
   let tenant = "";
-  const parts = host.split('.');
-  if (parts.length >= 2 && !host.startsWith('localhost')) {
-    tenant = parts[0];
-  } else if (host.endsWith('.localhost:3000')) {
-    tenant = host.replace('.localhost:3000', '');
+  if (host.endsWith(`.${localDomain}`)) {
+    tenant = host.replace(`.${localDomain}`, "");
   }
 
   // If no tenant detected from host, it's a global login

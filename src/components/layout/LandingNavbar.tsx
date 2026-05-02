@@ -115,6 +115,7 @@ export function LandingNavbar({ settings }: { settings?: any }) {
               onClick={toggleTheme}
               className="hover:text-muted dark:hover:text-white p-1.5 rounded-full transition-colors"
               aria-label="Toggle Theme"
+              suppressHydrationWarning
             >
               {mounted ? (theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />) : <div className="w-4 h-4" />}
             </button>
@@ -162,7 +163,10 @@ export function LandingNavbar({ settings }: { settings?: any }) {
                   <Link
                     key={link.id}
                     href={link.href}
-                    className={`transition-all duration-300 pt-2 pb-0.5 px-1 font-bold border-b-2 ${isActive ? 'text-primary font-black border-primary' : 'text-foreground/70 border-transparent hover:text-primary hover:border-primary/50'}`}
+                    className={`transition-all duration-300 pt-2 pb-0.5 px-1 font-bold border-b-2 ${isActive
+                      ? 'text-primary dark:text-white font-bold border-primary dark:border-white'
+                      : 'text-foreground/70 border-transparent hover:border-primary/50'
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -175,14 +179,14 @@ export function LandingNavbar({ settings }: { settings?: any }) {
           <div className="hidden lg:flex items-center gap-4 shrink-0">
             {config.ctaSecondary?.text && (
               <Link href={config.ctaSecondary.link || "#"}>
-                <Button variant="outline" className="border-border text-foreground hover:bg-black hover:text-white hover:border-black font-bold px-6 border-2 rounded-xl transition-all h-11">
+                <Button variant="outline" className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary font-bold px-6 border-2 rounded-xl transition-all h-11">
                   {config.ctaSecondary.text}
                 </Button>
               </Link>
             )}
             {config.ctaPrimary?.text && (
               <Link href={config.ctaPrimary.link || "#"}>
-                <Button className="font-bold shadow-lg shadow-black/10 bg-black text-white hover:bg-zinc-800 transition-all px-8 rounded-xl h-11">
+                <Button className="font-bold shadow-lg shadow-primary/10 bg-primary text-primary-foreground hover:opacity-90 transition-all px-8 rounded-xl h-11">
                   {config.ctaPrimary.text}
                 </Button>
               </Link>

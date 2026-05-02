@@ -78,7 +78,7 @@ export default async function WorkspaceCoursesPage({
         </div>
       </main>
 
-      <WorkspaceFooter settings={workspace.siteSettings} />
+      <WorkspaceFooter settings={workspace.siteSettings} tenant={tenant} />
     </div>
   );
 }

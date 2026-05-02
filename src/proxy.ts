@@ -10,25 +10,55 @@ export default auth((req) => {
   // Get hostname of request
   const hostname = req.headers.get("host") || "";
   
-  // Clean up local development hostnames
-  const localDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
+  // 1. Detect the root domain dynamically
+  let localDomain = "";
+  const rootEnv = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "";
+  
+  if (hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
+    // For localhost, root is the base (e.g., localhost:3000)
+    const parts = hostname.split('.');
+    localDomain = parts.length > 1 ? parts.slice(1).join('.') : hostname;
+  } else if (rootEnv && hostname.endsWith(rootEnv)) {
+    // If env var is set and matches current host suffix
+    localDomain = rootEnv;
+  } else {
+    // Production/Vercel fallback: extract root from hostname
+    const parts = hostname.split('.');
+    if (hostname.includes("vercel.app")) {
+      // tenant.project.vercel.app -> project.vercel.app
+      localDomain = parts.length > 3 ? parts.slice(1).join('.') : hostname;
+    } else {
+      // tenant.domain.com -> domain.com
+      localDomain = parts.length >= 3 ? parts.slice(-2).join('.') : hostname;
+    }
+  }
+
+  // Final fallback
+  if (!localDomain) localDomain = "localhost:3000";
   
   const searchParams = req.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
-  // If we're on a non-tenant base URL
+  // 1. Handle root domain and specific bypasses
   if (
     hostname === localDomain ||
-    hostname.includes("vercel.app") // Skip subdomains for initial Vercel branch previews
+    // Skip subdomains for initial Vercel branch previews (except if it matches our localDomain pattern)
+    (hostname.includes("vercel.app") && !hostname.endsWith(`.${localDomain}`) && !hostname.startsWith('super-admin.'))
   ) {
     return NextResponse.next();
   }
 
-  // Multi-tenant routing handling
+  // 2. Handle subdomains (Super Admin and Tenants)
   if (hostname.endsWith(`.${localDomain}`)) {
-    const tenant = hostname.replace(`.${localDomain}`, "");
-    // Prevent routing to reserved subdomains like "www"
-    if (tenant !== 'www') {
+    const tenant = hostname.replace(`.${localDomain}`, "").toLowerCase();
+    
+    // Special case: Super Admin Subdomain
+    if (tenant === 'super-admin') {
+      return NextResponse.rewrite(new URL(`/super-admin${path === "/" ? "" : path}`, req.url));
+    }
+
+    // Generic Tenant Subdomain
+    if (tenant !== 'www' && tenant !== 'admin') {
       const rewriteUrl = new URL(`/app/${tenant}${path === "/" ? "" : path}`, req.url);
       return NextResponse.rewrite(rewriteUrl);
     }

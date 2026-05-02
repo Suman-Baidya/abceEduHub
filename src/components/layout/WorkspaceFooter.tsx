@@ -8,38 +8,24 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useParams, usePathname } from "next/navigation";
+import { getTenantLink, detectTenant } from "@/lib/routing";
+import { usePathname } from "next/navigation";
+
+import { useState, useEffect } from "react";
 
 export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: any; tenant?: string }) {
-  const params = useParams();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   
-  // Robust tenant detection
-  const getTenant = () => {
-    if (propTenant) return propTenant;
-    if (params?.tenant) return params.tenant as string;
-    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
-    
-    // Client-side fallback for subdomains
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      const parts = hostname.split('.');
-      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
-        return parts[0];
-      }
-      // Special case for tenant.localhost
-      if (hostname.endsWith('.localhost')) {
-        return hostname.replace('.localhost', '');
-      }
-    }
-    return "";
-  };
-
-  const tenant = getTenant();
-  const isSubdirectoryMode = pathname.startsWith('/app/');
-  const workspaceBase = (isSubdirectoryMode && tenant) ? `/app/${tenant}` : '';
-  const adminBase = isSubdirectoryMode ? `${workspaceBase}/admin` : "/admin";
-  const rootHref = isSubdirectoryMode ? `${workspaceBase}/` : "/";
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Robust tenant detection using unified utility
+  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.hostname : undefined);
+  
+  const adminBase = getTenantLink("/admin", tenant, pathname);
+  const rootHref = getTenantLink("/", tenant, pathname);
 
   const siteName = settings?.siteName || "Institute Portal";
   const logoUrl = settings?.logoUrl || "/logo.png";
@@ -51,6 +37,9 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
   
   const brandDescription = settings?.brandDescription || "Providing quality education and digital resources to students. Your success is our mission.";
   
+  // Link helper
+  const getLink = (path: string) => getTenantLink(path, tenant, pathname);
+
   const navLinks = settings?.navigation || [
     { name: "About", href: "/about", id: "about" },
     { name: "Courses", href: "/courses", id: "courses" },
@@ -58,6 +47,8 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
     { name: "Students", href: "/students", id: "students" },
     { name: "Contact", href: "/contact", id: "contact" }
   ];
+
+  if (!mounted) return null;
 
   return (
     <footer className="w-full bg-zinc-950 text-zinc-300 pt-24 pb-12 font-sans relative overflow-hidden border-t border-white/5">
@@ -91,27 +82,25 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
           {/* Brand Column */}
           <div className="space-y-8">
             <Link href={rootHref} className="flex items-center gap-3 shrink-0 group w-fit">
-              <div className="relative w-12 h-12 flex items-center justify-center shrink-0 bg-white/5 rounded-2xl overflow-hidden border border-white/10 p-1 group-hover:border-primary/50 transition-all">
-                <Image
-                  src={logoUrl}
-                  alt={`${siteName} Logo`}
-                  fill
-                  className="object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const fallback = e.currentTarget.parentElement?.querySelector('.logo-fallback');
-                    if (fallback) fallback.classList.remove('hidden');
-                  }}
-                />
-                <div className="logo-fallback hidden w-full h-full bg-primary text-primary-foreground flex items-center justify-center font-black text-xl uppercase">
-                  {siteName.charAt(0)}
-                </div>
+              <div className="relative w-12 h-12 flex items-center justify-center shrink-0 bg-white/5 rounded-2xl overflow-hidden border border-white/10 group-hover:border-primary/50 transition-all">
+                {settings?.logoUrl ? (
+                  <Image
+                    src={settings.logoUrl}
+                    alt={`${siteName} Logo`}
+                    fill
+                    className="object-contain p-1"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center font-black text-xl uppercase">
+                    {siteName.charAt(0)}
+                  </div>
+                )}
               </div>
               <span className="text-2xl font-black tracking-tighter text-white group-hover:text-primary transition-colors">
                 {siteName}
               </span>
             </Link>
-            {tenant && (
+            {mounted && tenant && (
               <Link href={adminBase}>
                 <Button variant="ghost" size="sm" className="text-[10px] font-bold tracking-widest text-white hover:bg-white/10 h-8">
                   DASHBOARD
@@ -151,7 +140,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
             </div>
             <div className="flex flex-col gap-4">
               {navLinks.map((link: any) => {
-                const href = link.href === '/' ? rootHref : `${workspaceBase}${link.href.startsWith('/') ? link.href : `/${link.href}`}`;
+                const href = getLink(link.href);
                 return (
                   <Link key={link.id} href={href} className="text-zinc-400 hover:text-primary font-bold text-[15px] transition-all flex items-center gap-2 group">
                     <ArrowRight className="w-3 h-3 text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-all" /> 
@@ -175,7 +164,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant }: { settings?: a
                 { name: 'Terms of Service', href: '/legal/terms' },
                 { name: 'Cookie Policy', href: '/legal/cookie' }
               ].map((item) => {
-                const href = item.href === '/' ? rootHref : `${workspaceBase}${item.href.startsWith('/') ? item.href : `/${item.href}`}`;
+                const href = getLink(item.href);
                 return (
                   <Link key={item.name} href={href} className="text-zinc-400 hover:text-primary font-bold text-[15px] transition-all flex items-center gap-2 group">
                      <ArrowRight className="w-3 h-3 text-primary/40 group-hover:text-primary group-hover:translate-x-1 transition-all" /> 

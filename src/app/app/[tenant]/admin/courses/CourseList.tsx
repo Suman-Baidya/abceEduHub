@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { 
   Plus, Search, MoreVertical, BookOpen, Layers, 
   Tag, Trash2, Edit3, ChevronDown, ChevronRight,
@@ -54,6 +54,11 @@ export default function CourseList({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Filter & Sort Logic
   const processedCourses = useMemo(() => {
@@ -75,6 +80,8 @@ export default function CourseList({
 
     return result;
   }, [initialCourses, searchTerm, sortConfig]);
+
+  if (!mounted) return null;
 
   const toggleSort = (key: string) => {
     setSortConfig(prev => {

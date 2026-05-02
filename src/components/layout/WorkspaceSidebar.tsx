@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { getAdminBase, detectTenant, getWorkspaceBase } from "@/lib/routing";
 import { signOut } from "next-auth/react";
 
 export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
@@ -27,37 +28,13 @@ export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
-  const params = useParams();
   
-  // Robust tenant detection
-  const getTenant = () => {
-    if (propTenant) return propTenant;
-    if (params?.tenant) return params.tenant as string;
-    
-    // Check hostname first (Subdomain Mode)
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      const parts = hostname.split('.');
-      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
-        return parts[0];
-      }
-      if (hostname.endsWith('.localhost')) {
-        return hostname.replace('.localhost', '');
-      }
-    }
-
-    // Fallback to pathname (Subdirectory Mode)
-    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
-    
-    return "";
-  };
-
-  const tenant = getTenant();
+  // Robust tenant detection using unified utility
+  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.hostname : undefined);
   const displayTenant = tenant || "Workspace";
 
-  const isSubdirectoryMode = pathname.startsWith('/app/');
-  const workspaceBase = isSubdirectoryMode ? `/app/${tenant}` : '';
-  const adminBase = isSubdirectoryMode ? `${workspaceBase}/admin` : `/admin`;
+  const adminBase = getAdminBase(tenant, pathname);
+  const workspaceBase = getWorkspaceBase(tenant, pathname);
 
   const navItems = [
     { name: "Overview", href: adminBase, icon: LayoutDashboard },

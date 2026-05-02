@@ -43,14 +43,22 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { getRootDomain } from "@/lib/domain";
+
 
 export default function WorkspacesClient({ initialWorkspaces }: { initialWorkspaces: any[] }) {
   const [mounted, setMounted] = useState(false);
+  const [rootDomain, setRootDomain] = useState(process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000");
+  
   useEffect(() => {
     setMounted(true);
+    // Dynamically detect domain on client side if not explicitly set
+    if (!process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+      setRootDomain(getRootDomain());
+    }
   }, []);
+
   const router = useRouter();
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
   const [isCreating, setIsCreating] = useState(false);
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({

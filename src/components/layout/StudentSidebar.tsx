@@ -23,39 +23,18 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 
+import { detectTenant, getWorkspaceBase, getTenantLink } from "@/lib/routing";
+
 export function StudentSidebar({ tenant: propTenant }: { tenant?: string }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
-  const params = useParams();
   
-  const getTenant = () => {
-    if (propTenant) return propTenant;
-    if (params?.tenant) return params.tenant as string;
-    
-    // Check hostname first (Subdomain Mode)
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      const parts = hostname.split('.');
-      if (parts.length >= 2 && !hostname.startsWith('localhost')) {
-        return parts[0];
-      }
-      if (hostname.endsWith('.localhost')) {
-        return hostname.replace('.localhost', '');
-      }
-    }
-
-    // Fallback to pathname (Subdirectory Mode)
-    if (pathname.startsWith('/app/')) return pathname.split('/')[2];
-    
-    return "";
-  };
-
-  const tenant = getTenant();
-  const isSubdirectoryMode = pathname.startsWith('/app/');
-  const workspaceBase = isSubdirectoryMode ? `/app/${tenant}` : '';
-  const studentBase = isSubdirectoryMode ? `${workspaceBase}/student` : `/student`;
+  // Robust tenant detection using unified utility
+  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.hostname : undefined);
+  const workspaceBase = getWorkspaceBase(tenant, pathname);
+  const studentBase = `${workspaceBase}/student`;
 
   const navItems = [
     { name: "Overview", href: `${studentBase}/dashboard`, icon: LayoutDashboard },
