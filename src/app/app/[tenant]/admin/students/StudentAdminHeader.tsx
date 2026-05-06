@@ -31,12 +31,11 @@ export function StudentAdminHeader({
   return (
     <div className="space-y-6 mb-10">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Student Operations</span>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Students Hub</h1>
+        <div className="space-y-1.5">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Students Hub</h1>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+            Manage your learners, process new applications, and configure your admission criteria.
+          </p>
         </div>
         
         <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 w-full lg:w-auto overflow-x-auto no-scrollbar">
@@ -47,6 +46,7 @@ export function StudentAdminHeader({
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
+                suppressHydrationWarning
                 className={cn(
                   "relative flex-1 lg:flex-none min-w-[120px] flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap",
                   isActive 

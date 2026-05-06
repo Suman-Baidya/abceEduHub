@@ -1,6 +1,8 @@
 import { db } from "@/lib/prisma";
 import { WorkspaceSettingsForm } from "./WorkspaceSettingsForm";
 import { redirect } from "next/navigation";
+import { getServerTenantLink } from "@/lib/routing-server";
+import { AdminPageHeader } from "@/components/layout/AdminPageHeader";
 
 export default async function WorkspaceSettingsPage({ params }: { params: Promise<{ tenant: string }> }) {
   const { tenant } = await params;
@@ -10,7 +12,8 @@ export default async function WorkspaceSettingsPage({ params }: { params: Promis
   });
 
   if (!workspace) {
-    redirect("/");
+    const rootRedirect = await getServerTenantLink("/", tenant);
+    redirect(rootRedirect);
   }
 
   let siteSettings = await db.siteSettings.findFirst({
@@ -93,15 +96,15 @@ export default async function WorkspaceSettingsPage({ params }: { params: Promis
   }
 
   return (
-    <div className="p-4 lg:p-10 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Institute Settings</h1>
-        <p className="text-muted-foreground text-lg">
-          Configure your institute's landing page content, branding, and visibility.
-        </p>
-      </div>
+    <div className="p-4 lg:p-10 max-w-7xl mx-auto space-y-10">
+      <AdminPageHeader 
+        title="Institute Settings" 
+        description="Configure your institute's landing page content, branding, and visibility."
+      />
 
-      <WorkspaceSettingsForm settings={siteSettings} />
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border-2 border-slate-100/50 dark:border-slate-800/50 p-8 shadow-sm">
+        <WorkspaceSettingsForm settings={siteSettings} />
+      </div>
     </div>
   );
 }

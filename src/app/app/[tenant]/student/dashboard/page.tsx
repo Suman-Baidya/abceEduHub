@@ -2,10 +2,10 @@ import { getStudentProfile } from "@/app/actions/student";
 import { getWorkspaceByTenant } from "@/lib/workspace";
 import StudentDashboardClient from "@/components/student/StudentDashboardClient";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { getServerTenantLink } from "@/lib/routing-server";
 
 export default async function StudentDashboardPage({
   params
@@ -18,6 +18,7 @@ export default async function StudentDashboardPage({
   if (!workspace) redirect("/");
 
   const result = await getStudentProfile(workspace.id);
+  const homeHref = await getServerTenantLink("/", tenant);
 
   if (!result.success) {
     return (
@@ -31,8 +32,8 @@ export default async function StudentDashboardPage({
               <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">We couldn't find an active student profile for your account in this workspace.</p>
            </div>
            <div className="pt-4 flex flex-col gap-3">
-              <Link href="/" className="w-full">
-                <Button variant="outline" className="w-full h-12 rounded-xl font-bold">Return to Website</Button>
+              <Link href={homeHref} className="w-full">
+                 <Button variant="outline" className="w-full h-12 rounded-xl font-bold">Return to Website</Button>
               </Link>
            </div>
         </div>

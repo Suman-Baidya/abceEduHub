@@ -15,18 +15,33 @@ const isSubdirectoryMode = pathname.startsWith('/app/');
 ```
 
 ### How to generate Workspace Links (GOLD RULE):
-NEVER hardcode `/app/[tenant]` or assume a root path in components or redirects. Use the centralized `getTenantLink` utility or `WORKSPACE_ROUTES` constants:
+#### In Client Components:
+Use `getTenantLink` with the current `pathname` from `usePathname()`.
 ```tsx
-import { getTenantLink, WORKSPACE_ROUTES } from "@/lib/routing";
-
-// Correct way to generate a link:
-const finalLink = getTenantLink(WORKSPACE_ROUTES.COURSES, tenant, pathname);
-
-// Correct way to redirect (relative to host):
-redirect(WORKSPACE_ROUTES.STUDENT_DASHBOARD); 
+import { getTenantLink, isActivePath } from "@/lib/routing";
+const href = getTenantLink("/student/dashboard", tenant, pathname);
+const isActive = isActivePath(pathname, href);
 ```
+
+#### Sidebars & Navigation:
+Always use `getTenantLink` for item `href` and `isActivePath(pathname, item.href)` for the active state. This ensures nested routes (e.g., `/admin/students/123`) correctly highlight the parent menu item.
+
+#### In Server Components (Layouts/Pages):
+Use `getServerTenantLink` from `@/lib/routing-server`. This helper automatically detects the routing mode via internal headers.
+```tsx
+import { getServerTenantLink } from "@/lib/routing-server";
+const href = await getServerTenantLink("/student/dashboard", tenant);
+```
+
+#### Redirects (Server-side):
+NEVER use raw strings like `redirect("/")`. Always wrap them in `getServerTenantLink` to maintain context in Subdirectory mode.
+```tsx
+const target = await getServerTenantLink("/", tenant);
+redirect(target);
+```
+
 > [!CAUTION]
-> Hardcoding `/app/${tenant}/...` in redirects will BREAK subdomain mode (causing double-prefix 404s). Always use relative paths like `/student/dashboard` for internal redirects within a workspace context.
+> Hardcoding `/app/${tenant}/...` in redirects or links will BREAK subdomain mode. Conversely, using `/` without a prefix will BREAK subdirectory mode. The `getServerTenantLink` utility is the ONLY safe way to handle this project-wide.
 
 ## 2. Context Separation
 - **Global Admin**: Routes starting with `/super-admin`. Data stored in `SiteSettings` with `workspaceId: null`.

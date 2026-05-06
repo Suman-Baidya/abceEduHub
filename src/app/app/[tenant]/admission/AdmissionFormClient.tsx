@@ -230,25 +230,25 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
               </div>
             </div>
             <div className="space-y-3">
-              <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Application Submitted!</h2>
+              <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Application Submitted!</h2>
               <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
                 {config?.successMessage || "Your admission application has been received. Please save your login credentials below to track your status."}
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
               <div className="bg-slate-50 dark:bg-zinc-900/50 border border-slate-100 dark:border-zinc-800 p-6 rounded-3xl text-left relative overflow-hidden group transition-all hover:border-primary/20">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-3 block">Application ID (Username)</Label>
+                <Label className="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-3 block">Application ID (Username)</Label>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-2xl font-mono font-black text-slate-900 dark:text-white">{successData.applicationNo}</span>
+                  <span className="text-2xl font-mono font-bold text-slate-900 dark:text-white">{successData.applicationNo}</span>
                   <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl bg-white dark:bg-zinc-950 border shadow-sm" onClick={() => {navigator.clipboard.writeText(successData.applicationNo); toast.success("ID Copied!");}}>
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               <div className="bg-slate-50 dark:bg-zinc-900/50 border border-slate-100 dark:border-zinc-800 p-6 rounded-3xl text-left relative overflow-hidden group transition-all hover:border-primary/20">
-                <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-3 block">Temporary Password</Label>
+                <Label className="text-[10px] font-bold tracking-[0.2em] text-slate-400 mb-3 block">Temporary Password</Label>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm font-mono font-black text-slate-900 dark:text-white bg-white dark:bg-zinc-900 px-2 py-1 rounded border overflow-hidden truncate max-w-[150px]">{successData.tempPassword}</span>
+                  <span className="text-sm font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-zinc-900 px-2 py-1 rounded border overflow-hidden truncate max-w-[150px]">{successData.tempPassword}</span>
                   <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl bg-white dark:bg-zinc-950 border shadow-sm" onClick={() => {navigator.clipboard.writeText(successData.tempPassword); toast.success("Password Copied!");}}>
                     <Copy className="h-4 w-4" />
                   </Button>
@@ -262,14 +262,14 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 </Button>
               </Link>
               <Link href={`${workspaceBase}/admission/status`} className="flex-1">
-                <Button variant="outline" className="w-full h-14 rounded-2xl border-2 border-slate-200 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50">
+                <Button variant="outline" className="w-full h-14 rounded-2xl border-2 border-slate-200 font-bold tracking-widest text-[10px] hover:bg-slate-50">
                   Track Status <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
             </div>
           </CardContent>
           <CardFooter className="bg-slate-50 dark:bg-zinc-900/80 border-t p-6 flex justify-center items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered by {workspaceName} Admission Portal</span>
+            <span className="text-[10px] font-bold text-slate-400 tracking-widest">Powered by {workspaceName} Admission Portal</span>
           </CardFooter>
         </Card>
       </div>
@@ -301,7 +301,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
 
       <Card className="shadow-xl border-primary/10 rounded-[2.5rem] overflow-hidden bg-white">
         <CardHeader className="bg-slate-50 dark:bg-zinc-900/50 border-b p-8">
-          <CardTitle className="text-2xl font-black">
+          <CardTitle className="text-2xl font-bold">
             {step === 0 && "Verification"}
             {step === 1 && "Personal Information"}
             {step === 2 && "Contact & Address"}
@@ -323,26 +323,26 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                   <div className="w-16 h-16 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mx-auto mb-4">
                     <Mail className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-black text-slate-900">Email Verification</h3>
+                  <h3 className="text-xl font-bold text-slate-900">Email Verification</h3>
                   <p className="text-sm text-slate-500">Solve the captcha and verify your email to continue.</p>
                 </div>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Email Address</Label>
+                    <Label className="text-xs font-bold tracking-widest text-slate-400">Email Address</Label>
                     <div className="relative group">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                       <Input {...form.register("email")} placeholder="yourname@example.com" disabled={isOtpSent} className="h-14 pl-12 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-primary/50 transition-all font-bold" />
                     </div>
-                    {errors.email && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.email.message}</p>}
+                    {errors.email && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.email.message}</p>}
                   </div>
                   {!isOtpSent && (
                     <div className="space-y-4 pt-4 border-t">
                       <div className="flex justify-between items-center">
-                        <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Solve: <span className="text-slate-900 bg-slate-100 px-2 py-1 rounded text-lg">{captcha.q}</span></Label>
+                        <Label className="text-xs font-bold tracking-widest text-slate-400">Solve: <span className="text-slate-900 bg-slate-100 px-2 py-1 rounded text-lg">{captcha.q}</span></Label>
                         <Button type="button" variant="ghost" size="icon" onClick={generateCaptcha} className="h-8 w-8"><RefreshCw className="w-4 h-4" /></Button>
                       </div>
                       <Input placeholder="Enter result" value={userCaptcha} onChange={(e) => setUserCaptcha(e.target.value)} className="h-14 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-primary/50 transition-all font-bold text-center text-xl" />
-                      <Button type="button" onClick={handleSendOtp} disabled={otpLoading || !watch("email") || !userCaptcha} className="w-full h-14 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs hover:bg-slate-800 shadow-xl">
+                      <Button type="button" onClick={handleSendOtp} disabled={otpLoading || !watch("email") || !userCaptcha} className="w-full h-14 rounded-2xl bg-slate-900 text-white font-bold tracking-widest text-xs hover:bg-slate-800 shadow-xl">
                         {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Send Verification Code"}
                       </Button>
                     </div>
@@ -350,8 +350,8 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                   {isOtpSent && !isEmailVerified && (
                     <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
                       <p className="text-xs font-bold text-center text-primary">A code has been sent to {watch("email") as string}</p>
-                      <Input maxLength={6} placeholder="000000" value={otp} onChange={(e) => setOtp(e.target.value)} className="h-16 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-primary/50 transition-all font-mono font-black text-center text-3xl tracking-[0.5em]" />
-                      <Button type="button" onClick={handleVerifyOtp} disabled={otpLoading || otp.length < 6} className="w-full h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl">
+                      <Input maxLength={6} placeholder="000000" value={otp} onChange={(e) => setOtp(e.target.value)} className="h-16 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-primary/50 transition-all font-mono font-bold text-center text-3xl tracking-[0.5em]" />
+                      <Button type="button" onClick={handleVerifyOtp} disabled={otpLoading || otp.length < 6} className="w-full h-14 rounded-2xl bg-primary text-white font-bold tracking-widest text-xs shadow-xl">
                         {otpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify & Continue"}
                       </Button>
                       <Button type="button" variant="ghost" onClick={() => {setIsOtpSent(false); setOtp("");}} className="w-full text-xs font-bold text-slate-400">Change Email</Button>
@@ -383,12 +383,12 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 <div className="space-y-2">
                   <Label>Full Name *</Label>
                   <Input {...form.register("fullName")} className="h-12 rounded-xl" />
-                  {errors.fullName && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.fullName.message}</p>}
+                  {errors.fullName && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.fullName.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Date of Birth *</Label>
                   <Input {...form.register("dob")} placeholder="DD/MM/YYYY" className="h-12 rounded-xl" />
-                  {errors.dob && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.dob.message}</p>}
+                  {errors.dob && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.dob.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Gender *</Label>
@@ -400,12 +400,12 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                       <SelectItem value="Others">Others</SelectItem>
                     </SelectContent>
                   </Select>
-                  {errors.gender && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.gender.message}</p>}
+                  {errors.gender && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.gender.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Guardian Name *</Label>
                   <Input {...form.register("guardianName")} className="h-12 rounded-xl" />
-                  {errors.guardianName && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.guardianName.message}</p>}
+                  {errors.guardianName && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.guardianName.message}</p>}
                 </div>
                 {!disabledFields.includes("religion") && (
                   <div className="space-y-2">
@@ -452,42 +452,42 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                     readOnly={showVerification && isEmailVerified} 
                     className={`h-12 rounded-xl ${showVerification && isEmailVerified ? 'bg-slate-50 opacity-70' : ''}`} 
                   />
-                  {errors.email && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.email.message}</p>}
+                  {errors.email && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.email.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Mobile *</Label>
                   <Input {...form.register("mobile")} className="h-12 rounded-xl" />
-                  {errors.mobile && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.mobile.message}</p>}
+                  {errors.mobile && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.mobile.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>PIN Code *</Label>
                   <Input {...form.register("pin")} onBlur={handlePinBlur} maxLength={6} className="h-12 rounded-xl" />
-                  {errors.pin && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.pin.message}</p>}
+                  {errors.pin && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.pin.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Village / Street *</Label>
                   <Input {...form.register("vill")} className="h-12 rounded-xl" />
-                  {errors.vill && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.vill.message}</p>}
+                  {errors.vill && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.vill.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Post Office *</Label>
                   <Input {...form.register("po")} className="h-12 rounded-xl" />
-                  {errors.po && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.po.message}</p>}
+                  {errors.po && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.po.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Police Station *</Label>
                   <Input {...form.register("ps")} className="h-12 rounded-xl" />
-                  {errors.ps && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.ps.message}</p>}
+                  {errors.ps && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.ps.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>District *</Label>
                   <Input {...form.register("dist")} className="h-12 rounded-xl" />
-                  {errors.dist && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.dist.message}</p>}
+                  {errors.dist && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.dist.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>State *</Label>
                   <Input {...form.register("state")} className="h-12 rounded-xl" />
-                  {errors.state && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.state.message}</p>}
+                  {errors.state && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.state.message}</p>}
                 </div>
               </div>
             )}
@@ -498,22 +498,22 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
                 <div className="space-y-2">
                   <Label>Qualification Name *</Label>
                   <Input {...form.register("qualName")} placeholder="e.g. 10th / 12th / Graduation" className="h-12 rounded-xl" />
-                  {errors.qualName && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.qualName.message}</p>}
+                  {errors.qualName && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.qualName.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Board / University *</Label>
                   <Input {...form.register("qualBoard")} className="h-12 rounded-xl" />
-                  {errors.qualBoard && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.qualBoard.message}</p>}
+                  {errors.qualBoard && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.qualBoard.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Year of Passing *</Label>
                   <Input {...form.register("qualYear")} maxLength={4} className="h-12 rounded-xl" />
-                  {errors.qualYear && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.qualYear.message}</p>}
+                  {errors.qualYear && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.qualYear.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label>Percentage / Grade *</Label>
                   <Input {...form.register("qualPercent")} className="h-12 rounded-xl" />
-                  {errors.qualPercent && <p className="text-red-500 text-[10px] font-bold uppercase mt-1">{errors.qualPercent.message}</p>}
+                  {errors.qualPercent && <p className="text-red-500 text-[10px] font-bold mt-1">{errors.qualPercent.message}</p>}
                 </div>
               </div>
             )}
@@ -600,7 +600,7 @@ export default function AdmissionFormClient({ workspaceId, workspaceName, config
             <ArrowLeft className="w-4 h-4 mr-2" /> Back
           </Button>
           {step > 0 && (
-            <Button onClick={step < 5 ? nextStep : form.handleSubmit(onSubmit)} disabled={isSubmitting} className="rounded-xl font-black uppercase tracking-widest text-xs px-8 bg-slate-900">
+            <Button onClick={step < 5 ? nextStep : form.handleSubmit(onSubmit)} disabled={isSubmitting} className="rounded-xl font-bold tracking-widest text-xs px-8 bg-slate-900">
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (step < 5 ? "Next Step" : "Submit")}
               {step < 5 && <ArrowRight className="w-4 h-4 ml-2" />}
             </Button>

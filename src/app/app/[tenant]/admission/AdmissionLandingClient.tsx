@@ -63,14 +63,14 @@ export default function AdmissionLandingClient({ workspaceId, workspaceName, con
               <UserPlus className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-black tracking-tight text-slate-900">New Admission</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900">New Admission</h2>
               <p className="text-slate-500 font-medium leading-relaxed">Start your journey with us. Fill out the application form to apply for our upcoming sessions.</p>
             </div>
             <div className="flex items-center gap-4 pt-4">
-              <Button className="rounded-2xl h-14 px-8 bg-slate-900 text-white font-black uppercase tracking-widest text-xs group-hover:bg-primary transition-colors">
+              <Button className="rounded-2xl h-14 px-8 bg-slate-900 text-white font-bold tracking-widest text-xs group-hover:bg-primary transition-colors">
                 Apply Now <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 tracking-widest">
                 <Sparkles className="w-3 h-3" /> Takes ~5 mins
               </div>
             </div>
@@ -91,14 +91,14 @@ export default function AdmissionLandingClient({ workspaceId, workspaceName, con
               <Search className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-black tracking-tight text-slate-900">Track Application</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900">Track Application</h2>
               <p className="text-slate-500 font-medium leading-relaxed">Already applied? Check your application status, download receipts, or complete your enrollment.</p>
             </div>
             <div className="flex items-center gap-4 pt-4">
-              <Button variant="outline" className="rounded-2xl h-14 px-8 border-2 border-slate-200 text-slate-900 font-black uppercase tracking-widest text-xs hover:bg-blue-50 hover:border-blue-200 transition-colors">
+              <Button variant="outline" className="rounded-2xl h-14 px-8 border-2 border-slate-200 text-slate-900 font-bold tracking-widest text-xs hover:bg-blue-50 hover:border-blue-200 transition-colors">
                 Check Status <ArrowRight className="w-4 h-4 ml-2 text-blue-500" />
               </Button>
-              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 tracking-widest">
                 <ShieldCheck className="w-3 h-3" /> Secure Login
               </div>
             </div>

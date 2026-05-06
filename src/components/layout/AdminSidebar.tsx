@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { isActivePath } from "@/lib/routing";
 
 const navItems = [
   { name: "Overview", href: "/super-admin", icon: LayoutDashboard },
@@ -125,9 +126,7 @@ export function AdminSidebar() {
         {/* Navigation */}
         <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto overflow-x-hidden custom-scrollbar">
           {navItems.map((item) => {
-            const isActive = item.href === '/super-admin' 
-              ? pathname === '/super-admin' 
-              : pathname.startsWith(item.href);
+            const isActive = isActivePath(pathname, item.href);
             return (
               <Link key={item.name} href={item.href}>
                 <div

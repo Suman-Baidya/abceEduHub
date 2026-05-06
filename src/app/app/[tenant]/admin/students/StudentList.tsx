@@ -103,7 +103,7 @@ export default function StudentList({
 
   const [formData, setFormData] = useState({
     fullName: "",
-    enrollmentNo: `STU-${Math.floor(1000 + Math.random() * 9000)}`,
+    enrollmentNo: "", // Initialize empty
     phone: "",
     email: "",
     whatsapp: "",
@@ -117,6 +117,14 @@ export default function StudentList({
     parentPhone: "",
     batchId: "",
   });
+
+  // Set initial enrollment no on client mount to avoid hydration mismatch
+  React.useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      enrollmentNo: `STU-${Math.floor(1000 + Math.random() * 9000)}`
+    }));
+  }, []);
 
   const filteredStudents = initialStudents.filter(s => 
     s.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -193,23 +201,23 @@ export default function StudentList({
               <div className="space-y-4">
                 <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">1. Personal Information</h3>
+                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 tracking-widest">1. Personal Information</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Full Name</Label>
+                    <Label className="font-bold text-xs text-slate-500">Full Name</Label>
                     <Input required value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} placeholder="Student Name" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Enrollment No</Label>
+                    <Label className="font-bold text-xs text-slate-500">Enrollment No</Label>
                     <Input required value={formData.enrollmentNo} onChange={e => setFormData({...formData, enrollmentNo: e.target.value})} placeholder="STU-XXXX" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Date of Birth</Label>
+                    <Label className="font-bold text-xs text-slate-500">Date of Birth</Label>
                     <Input type="date" value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Gender</Label>
+                    <Label className="font-bold text-xs text-slate-500">Gender</Label>
                     <Select value={(formData.gender as string) || ""} onValueChange={(val: any) => setFormData({...formData, gender: val})}>
                       <SelectTrigger className="rounded-xl h-11">
                         <SelectValue placeholder="Select Gender" />
@@ -222,11 +230,11 @@ export default function StudentList({
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Blood Group</Label>
+                    <Label className="font-bold text-xs text-slate-500">Blood Group</Label>
                     <Input value={formData.bloodGroup} onChange={e => setFormData({...formData, bloodGroup: e.target.value})} placeholder="e.g. O+" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Religion</Label>
+                    <Label className="font-bold text-xs text-slate-500">Religion</Label>
                     <Input value={formData.religion} onChange={e => setFormData({...formData, religion: e.target.value})} placeholder="e.g. Hindu" className="rounded-xl h-11" />
                   </div>
                 </div>
@@ -236,23 +244,23 @@ export default function StudentList({
               <div className="space-y-4">
                 <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">2. Contact & Address</h3>
+                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 tracking-widest">2. Contact & Address</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Phone Number</Label>
+                    <Label className="font-bold text-xs text-slate-500">Phone Number</Label>
                     <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Whatsapp Number</Label>
+                    <Label className="font-bold text-xs text-slate-500">Whatsapp Number</Label>
                     <Input value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Email Address</Label>
+                    <Label className="font-bold text-xs text-slate-500">Email Address</Label>
                     <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="student@example.com" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Full Address</Label>
+                    <Label className="font-bold text-xs text-slate-500">Full Address</Label>
                     <Input value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} placeholder="Village, P.O, P.S, Dist, Pin" className="rounded-xl h-11" />
                   </div>
                 </div>
@@ -262,19 +270,19 @@ export default function StudentList({
               <div className="space-y-4">
                 <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">3. Guardian & Academic</h3>
+                  <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 tracking-widest">3. Guardian & Academic</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Parent/Guardian Name</Label>
+                    <Label className="font-bold text-xs text-slate-500">Parent/Guardian Name</Label>
                     <Input value={formData.parentName} onChange={e => setFormData({...formData, parentName: e.target.value})} placeholder="Father/Mother Name" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Parent Phone</Label>
+                    <Label className="font-bold text-xs text-slate-500">Parent Phone</Label>
                     <Input value={formData.parentPhone} onChange={e => setFormData({...formData, parentPhone: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="font-bold text-xs uppercase text-slate-500">Assign Batch</Label>
+                    <Label className="font-bold text-xs text-slate-500">Assign Batch</Label>
                     <Select value={(formData.batchId as string) || ""} onValueChange={(val: any) => setFormData({...formData, batchId: val})}>
                       <SelectTrigger className="rounded-xl h-11">
                         <SelectValue placeholder="Select a batch" />
@@ -316,16 +324,16 @@ export default function StudentList({
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-slate-900 dark:text-white truncate text-lg leading-none">{student.fullName}</h3>
                     {student.admissionApp && (
-                      <span className="text-[8px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded uppercase tracking-tight">
+                      <span className="text-[8px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded tracking-tight">
                         Online
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-slate-400 dark:text-slate-500">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary/70">{student.enrollmentNo}</span>
+                    <span className="text-[10px] font-bold tracking-wider text-primary/70">{student.enrollmentNo}</span>
                     <span className="h-1 w-1 rounded-full bg-slate-200 dark:bg-slate-800" />
-                    <span className="text-[10px] font-bold uppercase whitespace-nowrap">
-                      Joined {new Date(student.admissionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    <span className="text-[10px] font-bold whitespace-nowrap" suppressHydrationWarning>
+                      Joined {new Date(student.admissionDate).toLocaleDateString('en-GB')}
                     </span>
                   </div>
                 </div>
@@ -333,7 +341,7 @@ export default function StudentList({
 
               <div className="flex items-center gap-8 md:px-8 md:border-x-2 md:border-slate-100 dark:md:border-slate-800/50">
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1 flex items-center gap-1">
+                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 mb-1 flex items-center gap-1">
                     <GraduationCap className="h-2.5 w-2.5" />
                     Batch
                   </p>
@@ -342,7 +350,7 @@ export default function StudentList({
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1 flex items-center gap-1">
+                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 mb-1 flex items-center gap-1">
                     <Phone className="h-2.5 w-2.5" />
                     Contact
                   </p>
@@ -355,7 +363,7 @@ export default function StudentList({
               <div className="flex items-center justify-end gap-3 shrink-0">
                 <Dialog>
                   <DialogTrigger render={
-                    <Button variant="outline" size="sm" className="rounded-xl h-10 font-bold text-[10px] uppercase gap-2 border-2 border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                    <Button variant="outline" size="sm" className="rounded-xl h-10 font-bold text-[10px] gap-2 border-2 border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
                       <Eye className="h-3.5 w-3.5 text-primary" />
                       View Details
                     </Button>
@@ -375,9 +383,9 @@ export default function StudentList({
                     <div className="flex justify-between items-start">
                       <div>
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{student.fullName}</h2>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">{student.enrollmentNo}</p>
+                        <p className="text-xs font-bold text-slate-400 tracking-wider mt-1">{student.enrollmentNo}</p>
                       </div>
-                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-none font-bold px-4 py-1 rounded-full text-[10px] uppercase">
+                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-none font-bold px-4 py-1 rounded-full text-[10px]">
                         Active Student
                       </Badge>
                     </div>
@@ -385,14 +393,14 @@ export default function StudentList({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-6">
                         <div className="space-y-4">
-                          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Academic Info</h4>
+                          <h4 className="text-[10px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Academic Info</h4>
                           <div className="space-y-3">
                             <div className="flex items-center gap-3">
                               <div className="h-8 w-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
                                 <GraduationCap className="h-4 w-4 text-slate-400" />
                               </div>
                               <div>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Batch / Course</p>
+                                <p className="text-[9px] font-bold text-slate-400">Batch / Course</p>
                                 <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{student.batch?.name || "Not Assigned"}</p>
                               </div>
                             </div>
@@ -401,9 +409,9 @@ export default function StudentList({
                                 <FileText className="h-4 w-4 text-slate-400" />
                               </div>
                               <div>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Admission Date</p>
-                                <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
-                                  {new Date(student.admissionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                <p className="text-[9px] font-bold text-slate-400">Admission Date</p>
+                                <p className="text-sm font-bold text-slate-700 dark:text-slate-200" suppressHydrationWarning>
+                                  {new Date(student.admissionDate).toLocaleDateString('en-GB')}
                                 </p>
                               </div>
                             </div>
@@ -413,14 +421,14 @@ export default function StudentList({
 
                       <div className="space-y-6">
                         <div className="space-y-4">
-                          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Contact Details</h4>
+                          <h4 className="text-[10px] font-bold text-slate-400 tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Contact Details</h4>
                           <div className="space-y-3">
                             <div className="flex items-center gap-3">
                               <div className="h-8 w-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
                                 <Phone className="h-4 w-4 text-slate-400" />
                               </div>
                               <div>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Phone Number</p>
+                                <p className="text-[9px] font-bold text-slate-400">Phone Number</p>
                                 <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{student.phone || "N/A"}</p>
                               </div>
                             </div>
@@ -429,7 +437,7 @@ export default function StudentList({
                                 <Mail className="h-4 w-4 text-slate-400" />
                               </div>
                               <div>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase">Email Address</p>
+                                <p className="text-[9px] font-bold text-slate-400">Email Address</p>
                                 <p className="text-sm font-bold text-slate-700 dark:text-slate-200 truncate max-w-[180px]">{student.email || "N/A"}</p>
                               </div>
                             </div>
@@ -442,7 +450,7 @@ export default function StudentList({
                       <div className="flex items-center gap-2">
                         {student.applicationId && (
                           <Link href={`${workspaceBase}/admission/print/${student.applicationId}`} target="_blank">
-                            <Button variant="ghost" size="sm" className="font-bold text-[10px] uppercase text-primary gap-2 hover:bg-primary/5">
+                            <Button variant="ghost" size="sm" className="font-bold text-[10px] text-primary gap-2 hover:bg-primary/5">
                               <FileText className="h-3 w-3" />
                               View Original Form
                             </Button>
@@ -486,23 +494,37 @@ export default function StudentList({
             <div className="space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-white" />
-                <h3 className="text-[10px] font-bold text-white uppercase tracking-widest">1. Personal Information</h3>
+                <h3 className="text-[10px] font-bold text-white tracking-widest">1. Personal Information</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Full Name</Label>
+                  <Label className="font-bold text-xs text-slate-500">Full Name</Label>
                   <Input required value={editFormData.fullName} onChange={e => setEditFormData({...editFormData, fullName: e.target.value})} placeholder="Student Name" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Enrollment No</Label>
+                  <Label className="font-bold text-xs text-slate-500">Enrollment No</Label>
                   <Input required value={editFormData.enrollmentNo} onChange={e => setEditFormData({...editFormData, enrollmentNo: e.target.value})} placeholder="STU-XXXX" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Date of Birth</Label>
-                  <Input type="date" value={editFormData.dob} onChange={e => setEditFormData({...editFormData, dob: e.target.value})} className="rounded-xl h-11" />
+                  <Label className="font-bold text-xs text-slate-500">Date of Birth</Label>
+                  <div className="relative">
+                    <Button 
+                      variant="outline" 
+                      type="button"
+                      className="w-full h-11 rounded-xl font-bold justify-start px-4 pointer-events-none"
+                    >
+                      {editFormData.dob ? new Date(editFormData.dob).toLocaleDateString('en-GB') : "Select Date"}
+                    </Button>
+                    <input 
+                      type="date" 
+                      value={editFormData.dob} 
+                      onChange={e => setEditFormData({...editFormData, dob: e.target.value})} 
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-20"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Gender</Label>
+                  <Label className="font-bold text-xs text-slate-500">Gender</Label>
                   <Select onValueChange={(val: any) => setEditFormData({...editFormData, gender: val})} value={(editFormData.gender as string) || ""}>
                     <SelectTrigger className="rounded-xl h-11">
                       <SelectValue placeholder="Select Gender" />
@@ -515,11 +537,11 @@ export default function StudentList({
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Blood Group</Label>
+                  <Label className="font-bold text-xs text-slate-500">Blood Group</Label>
                   <Input value={editFormData.bloodGroup} onChange={e => setEditFormData({...editFormData, bloodGroup: e.target.value})} placeholder="e.g. O+" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Religion</Label>
+                  <Label className="font-bold text-xs text-slate-500">Religion</Label>
                   <Input value={editFormData.religion} onChange={e => setEditFormData({...editFormData, religion: e.target.value})} placeholder="e.g. Hindu" className="rounded-xl h-11" />
                 </div>
               </div>
@@ -529,23 +551,23 @@ export default function StudentList({
             <div className="space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">2. Contact & Address</h3>
+                <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 tracking-widest">2. Contact & Address</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Phone Number</Label>
+                  <Label className="font-bold text-xs text-slate-500">Phone Number</Label>
                   <Input value={editFormData.phone} onChange={e => setEditFormData({...editFormData, phone: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Whatsapp Number</Label>
+                  <Label className="font-bold text-xs text-slate-500">Whatsapp Number</Label>
                   <Input value={editFormData.whatsapp} onChange={e => setEditFormData({...editFormData, whatsapp: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Email Address</Label>
+                  <Label className="font-bold text-xs text-slate-500">Email Address</Label>
                   <Input type="email" value={editFormData.email} onChange={e => setEditFormData({...editFormData, email: e.target.value})} placeholder="student@example.com" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Full Address</Label>
+                  <Label className="font-bold text-xs text-slate-500">Full Address</Label>
                   <Input value={editFormData.address} onChange={e => setEditFormData({...editFormData, address: e.target.value})} placeholder="Village, P.O, P.S, Dist, Pin" className="rounded-xl h-11" />
                 </div>
               </div>
@@ -555,19 +577,19 @@ export default function StudentList({
             <div className="space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 uppercase tracking-widest">3. Guardian & Academic</h3>
+                <h3 className="text-[10px] font-bold text-slate-900 dark:text-slate-200 tracking-widest">3. Guardian & Academic</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Parent/Guardian Name</Label>
+                  <Label className="font-bold text-xs text-slate-500">Parent/Guardian Name</Label>
                   <Input value={editFormData.parentName} onChange={e => setEditFormData({...editFormData, parentName: e.target.value})} placeholder="Father/Mother Name" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Parent Phone</Label>
+                  <Label className="font-bold text-xs text-slate-500">Parent Phone</Label>
                   <Input value={editFormData.parentPhone} onChange={e => setEditFormData({...editFormData, parentPhone: e.target.value})} placeholder="+91 XXXXX XXXXX" className="rounded-xl h-11" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label className="font-bold text-xs uppercase text-slate-500">Assign Batch</Label>
+                  <Label className="font-bold text-xs text-slate-500">Assign Batch</Label>
                   <Select value={(editFormData.batchId as string) || ""} onValueChange={(val: any) => setEditFormData({...editFormData, batchId: val})}>
                     <SelectTrigger className="rounded-xl h-11">
                       <SelectValue placeholder="Select a batch" />
@@ -595,7 +617,7 @@ export default function StudentList({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-          <p className="text-xs font-bold text-slate-400 uppercase">
+          <p className="text-xs font-bold text-slate-400">
             Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} Students
           </p>
           <div className="flex items-center gap-2">

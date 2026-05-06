@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { sendOTPEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 
 // Upgrade password generation: 12 chars, random mix
 function generateSecurePassword() {
@@ -157,6 +158,9 @@ export async function submitAdmissionApplication(workspaceId: string, data: any)
         link: `/admin/students/applications/${application.id}`,
       }
     });
+
+    revalidatePath(`/app/[tenant]/admin`, "layout");
+    revalidatePath(`/app/[tenant]/admin/admissions`);
 
     return { 
       success: true, 

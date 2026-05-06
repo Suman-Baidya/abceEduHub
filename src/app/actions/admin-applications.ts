@@ -85,6 +85,8 @@ export async function approveApplication(applicationId: string, batchId: string)
 
     revalidatePath(`/app/[tenant]/admin/students`);
     revalidatePath(`/app/[tenant]/admin/students/applications`);
+    revalidatePath(`/app/[tenant]/admin/admissions`);
+    revalidatePath(`/app/[tenant]/admin`, "layout");
     
     return { success: true, data: result.student };
   } catch (error: any) {
@@ -101,9 +103,26 @@ export async function rejectApplication(applicationId: string, reason: string) {
     });
     
     revalidatePath(`/app/[tenant]/admin/students/applications`);
+    revalidatePath(`/app/[tenant]/admin/admissions`);
+    revalidatePath(`/app/[tenant]/admin`, "layout");
     return { success: true };
   } catch (error: any) {
     console.error("Error rejecting application:", error);
     return { success: false, error: "Failed to reject application." };
+  }
+}
+
+export async function getPendingApplicationsCount(workspaceId: string) {
+  try {
+    const count = await db.admissionApplication.count({
+      where: { 
+        workspaceId,
+        status: "PENDING"
+      }
+    });
+    return { success: true, data: count };
+  } catch (error: any) {
+    console.error("Error fetching pending count:", error);
+    return { success: false, error: "Failed to fetch pending count." };
   }
 }

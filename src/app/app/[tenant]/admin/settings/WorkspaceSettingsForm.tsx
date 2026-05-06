@@ -1805,7 +1805,21 @@ function EventForm({ initialData, onSave, isProcessing, mediaFolderBase }: any) 
         <div className="p-8 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-border/40 shadow-sm space-y-6">
            <div className="space-y-3">
               <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Event Date</Label>
-              <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} className="h-12 rounded-2xl font-bold" />
+              <div className="relative">
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  className="w-full h-12 rounded-2xl font-bold justify-start px-4 pointer-events-none"
+                >
+                  {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : "Select Date"}
+                </Button>
+                <input 
+                  type="date" 
+                  value={formData.date} 
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })} 
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-20"
+                />
+              </div>
            </div>
            <div className="space-y-3">
               <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Time</Label>

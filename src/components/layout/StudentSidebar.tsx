@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 
-import { detectTenant, getWorkspaceBase } from "@/lib/routing";
+import { detectTenant, getTenantLink, isActivePath, WORKSPACE_ROUTES } from "@/lib/routing";
 
 export function StudentSidebar({ tenant: propTenant }: { tenant?: string }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -29,18 +29,15 @@ export function StudentSidebar({ tenant: propTenant }: { tenant?: string }) {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   
-  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.hostname : undefined);
-  const workspaceBase = getWorkspaceBase(tenant, pathname);
-  const studentBase = `${workspaceBase}/student`;
-
+  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.host : undefined);
   const navItems = [
-    { name: "Overview", href: `${studentBase}/dashboard`, icon: LayoutDashboard },
-    { name: "My Courses", href: `${studentBase}/courses`, icon: BookOpen },
-    { name: "Attendance", href: `${studentBase}/attendance`, icon: Calendar },
-    { name: "Exams", href: `${studentBase}/exams`, icon: FileText },
-    { name: "Fees & Invoices", href: `${studentBase}/fees`, icon: Wallet },
-    { name: "Notices", href: `${studentBase}/notices`, icon: Bell },
-    { name: "My Profile", href: `${studentBase}/profile`, icon: User },
+    { name: "Overview", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_DASHBOARD, tenant, pathname), icon: LayoutDashboard },
+    { name: "My Courses", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_COURSES, tenant, pathname), icon: BookOpen },
+    { name: "Attendance", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_ATTENDANCE, tenant, pathname), icon: Calendar },
+    { name: "Exams", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_EXAMS, tenant, pathname), icon: FileText },
+    { name: "Fees & Invoices", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_FEES, tenant, pathname), icon: Wallet },
+    { name: "Notices", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_NOTICES, tenant, pathname), icon: Bell },
+    { name: "My Profile", href: getTenantLink(WORKSPACE_ROUTES.STUDENT_PROFILE, tenant, pathname), icon: User },
   ];
 
   useEffect(() => {
@@ -116,7 +113,7 @@ export function StudentSidebar({ tenant: propTenant }: { tenant?: string }) {
 
         <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto overflow-x-hidden custom-scrollbar">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive = isActivePath(pathname, item.href);
             return (
               <Link key={item.name} href={item.href}>
                 <div
@@ -155,7 +152,7 @@ export function StudentSidebar({ tenant: propTenant }: { tenant?: string }) {
           <div 
             onClick={async () => {
               const origin = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : '';
-              const workspaceBaseUrl = workspaceBase || '/';
+              const workspaceBaseUrl = getTenantLink("/", tenant, pathname);
               const target = `${origin}${workspaceBaseUrl}`;
               await signOut({ redirect: false });
               window.location.href = target;

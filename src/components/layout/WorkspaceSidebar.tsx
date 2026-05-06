@@ -9,40 +9,46 @@ import {
   Users,
   UserCheck,
   BookOpen,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Menu,
   X,
   LogOut,
   Building2,
-  Wallet,
+  Calendar,
+  UserPlus,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { getAdminBase, detectTenant, getWorkspaceBase } from "@/lib/routing";
+import { detectTenant, getTenantLink, isActivePath, WORKSPACE_ROUTES } from "@/lib/routing";
 import { signOut } from "next-auth/react";
 
-export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
+export function WorkspaceSidebar({ 
+  tenant: propTenant,
+  admissionsCount = 0 
+}: { 
+  tenant?: string;
+  admissionsCount?: number;
+}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   
   // Robust tenant detection using unified utility
-  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.hostname : undefined);
+  const tenant = propTenant || detectTenant(pathname, typeof window !== 'undefined' ? window.location.host : undefined);
   const displayTenant = tenant || "Workspace";
 
-  const adminBase = getAdminBase(tenant, pathname);
-  const workspaceBase = getWorkspaceBase(tenant, pathname);
-
   const navItems = [
-    { name: "Overview", href: adminBase, icon: LayoutDashboard },
-    { name: "Staff & Roles", href: `${adminBase}/staff`, icon: UserCheck },
-    { name: "Learners", href: `${adminBase}/students`, icon: Users },
-    { name: "Courses", href: `${adminBase}/courses`, icon: BookOpen },
-    { name: "Landing Page", href: `${adminBase}/settings`, icon: Building2 },
-    { name: "Token Wallet", href: `${adminBase}/wallet`, icon: Wallet },
+    { name: "Overview", href: getTenantLink(WORKSPACE_ROUTES.ADMIN, tenant, pathname), icon: LayoutDashboard },
+    { name: "Staff & Roles", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_STAFF, tenant, pathname), icon: UserCheck },
+    { name: "Students", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_STUDENTS, tenant, pathname), icon: Users },
+    { name: "Admissions", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_ADMISSIONS, tenant, pathname), icon: UserPlus },
+    { name: "Attendance", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_ATTENDANCE, tenant, pathname), icon: Calendar },
+    { name: "Courses", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_COURSES, tenant, pathname), icon: BookOpen },
+    { name: "Exam Gen", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_EXAM_GENERATOR, tenant, pathname), icon: Sparkles },
+    { name: "Landing Page", href: getTenantLink(WORKSPACE_ROUTES.ADMIN_SETTINGS, tenant, pathname), icon: Building2 },
   ];
 
   // Close mobile sidebar on navigation
@@ -138,7 +144,7 @@ export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
         {/* Navigation */}
         <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto overflow-x-hidden custom-scrollbar">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== adminBase && pathname.startsWith(item.href));
+            const isActive = isActivePath(pathname, item.href);
             return (
               <Link key={item.name} href={item.href}>
                 <div
@@ -156,10 +162,27 @@ export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
                     <motion.span
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="font-medium whitespace-nowrap"
+                      className="font-medium whitespace-nowrap flex-1"
                     >
                       {item.name}
                     </motion.span>
+                  )}
+
+                  {!isCollapsed && item.name === "Admissions" && admissionsCount > 0 && (
+                    <span className={cn(
+                      "ml-auto flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-lg text-[10px] font-bold transition-colors shadow-sm",
+                      isActive 
+                        ? "bg-white text-zinc-950" 
+                        : "bg-red-500 text-white"
+                    )}>
+                      {admissionsCount}
+                    </span>
+                  )}
+
+                  {isCollapsed && item.name === "Admissions" && admissionsCount > 0 && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center shadow-lg ring-2 ring-zinc-950 animate-pulse">
+                      {admissionsCount}
+                    </div>
                   )}
 
                   {isActive && (
@@ -185,7 +208,8 @@ export function WorkspaceSidebar({ tenant: propTenant }: { tenant?: string }) {
           <div 
             onClick={async () => {
               const origin = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : '';
-              const target = `${origin}${workspaceBase || '/'}`;
+              const workspaceBase = getTenantLink("/", tenant, pathname);
+              const target = `${origin}${workspaceBase}`;
               await signOut({ redirect: false });
               window.location.href = target;
             }}

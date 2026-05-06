@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { getTenantLink, WORKSPACE_ROUTES } from "@/lib/routing";
+import { getTenantLink, WORKSPACE_ROUTES, isActivePath } from "@/lib/routing";
 
 export function MobileBottomNav({ tenant }: { tenant: string }) {
   const pathname = usePathname();
@@ -30,7 +30,7 @@ export function MobileBottomNav({ tenant }: { tenant: string }) {
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-2xl border-t border-slate-200 dark:border-white/5 px-6 pb-8 pt-3 flex items-center justify-between shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
       {navItems.map((item) => {
-        const isActive = pathname === item.href || (item.name !== "Home" && pathname.startsWith(item.href));
+        const isActive = isActivePath(pathname, item.href, item.name === "Home");
         return (
           <Link key={item.name} href={item.href} className="flex flex-col items-center gap-1.5 group">
             <div className={cn(

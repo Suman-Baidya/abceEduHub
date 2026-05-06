@@ -45,7 +45,14 @@ export default auth((req) => {
     // Skip subdomains for initial Vercel branch previews (except if it matches our localDomain pattern)
     (hostname.includes("vercel.app") && !hostname.endsWith(`.${localDomain}`) && !hostname.startsWith('super-admin.'))
   ) {
-    return NextResponse.next();
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('x-pathname', url.pathname);
+    
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      }
+    });
   }
 
   // 2. Handle subdomains (Super Admin and Tenants)
@@ -54,17 +61,38 @@ export default auth((req) => {
     
     // Special case: Super Admin Subdomain
     if (tenant === 'super-admin') {
-      return NextResponse.rewrite(new URL(`/super-admin${path === "/" ? "" : path}`, req.url));
+      const rewriteUrl = new URL(`/super-admin${path === "/" ? "" : path}`, req.url);
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('x-pathname', url.pathname);
+      
+      return NextResponse.rewrite(rewriteUrl, {
+        request: {
+          headers: requestHeaders,
+        }
+      });
     }
 
     // Generic Tenant Subdomain
     if (tenant !== 'www' && tenant !== 'admin') {
       const rewriteUrl = new URL(`/app/${tenant}${path === "/" ? "" : path}`, req.url);
-      return NextResponse.rewrite(rewriteUrl);
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('x-pathname', url.pathname);
+      
+      return NextResponse.rewrite(rewriteUrl, {
+        request: {
+          headers: requestHeaders,
+        }
+      });
     }
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-pathname', url.pathname);
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    }
+  });
 });
 
 export const config = {

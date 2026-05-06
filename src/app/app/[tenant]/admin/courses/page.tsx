@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getCourses } from "@/app/actions/courses";
 import CourseList from "./CourseList";
 
+import { AdminPageHeader } from "@/components/layout/AdminPageHeader";
+
 // Trigger refresh to resolve HMR stale cache issue
 export default async function CoursesPage({
   params
@@ -20,17 +22,16 @@ export default async function CoursesPage({
   const coursesResult = await getCourses(workspace.id);
 
   return (
-    <div className="p-4 lg:p-10">
-      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Courses & Batches</h1>
-          <p className="text-muted-foreground mt-1">Design your curriculum, manage batches, and set pricing.</p>
-        </div>
-      </div>
+    <div className="p-4 lg:px-10 lg:py-10 max-w-7xl mx-auto space-y-10">
+      <AdminPageHeader 
+        title="Courses & Curricula" 
+        description="Design your curriculum, manage batches, and set pricing for your institute."
+      />
       
       <CourseList 
         workspaceId={workspace.id} 
         initialCourses={coursesResult.data ?? []} 
+        tenant={tenant}
       />
     </div>
   );

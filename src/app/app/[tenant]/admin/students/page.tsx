@@ -1,8 +1,7 @@
 import { db } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { getStudents } from "@/app/actions/students";
-import { getAdmissionConfig } from "@/app/actions/admission-config";
-import StudentsDashboardClient from "./StudentsDashboardClient";
+import StudentsManagementClient from "./StudentsManagementClient";
 
 export default async function StudentsPage({
   params
@@ -13,40 +12,33 @@ export default async function StudentsPage({
   const normalizedTenant = tenant?.toLowerCase();
 
   const workspace = await db.workspace.findUnique({
-    where: { subdomain: normalizedTenant },
-    include: {
-      admissionApps: {
-        orderBy: { createdAt: "desc" }
-      }
-    }
+    where: { subdomain: normalizedTenant }
   });
 
   if (!workspace) notFound();
 
   const studentsResult = await getStudents(workspace.id);
+  
   const batches = await db.batch.findMany({
     where: { workspaceId: workspace.id },
-    select: { id: true, name: true }
+    include: {
+      course: { select: { title: true } },
+      _count: { select: { students: true } }
+    },
+    orderBy: { createdAt: "desc" }
   });
 
-  const configResult = await getAdmissionConfig(workspace.id);
-  const config = configResult.success ? configResult.data : {};
-
-  const pendingCount = await db.admissionApplication.count({
-    where: { 
-      workspaceId: workspace.id,
-      status: "PENDING"
-    }
+  const courses = await db.course.findMany({
+    where: { workspaceId: workspace.id, isActive: true },
+    select: { id: true, title: true }
   });
 
   return (
-    <StudentsDashboardClient 
+    <StudentsManagementClient 
       workspaceId={workspace.id}
       initialStudents={studentsResult.data ?? []}
       batches={batches}
-      applications={workspace.admissionApps || []}
-      config={configResult.data ?? {}}
-      pendingCount={pendingCount}
+      courses={courses}
     />
   );
 }

@@ -122,7 +122,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
               </div>
 
               <div className="space-y-3">
-                <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Welcome Instructions</Label>
+                <Label className="text-[11px] font-bold tracking-wider text-slate-400">Welcome Instructions</Label>
                 <Textarea 
                   value={instructions} 
                   onChange={e => setInstructions(e.target.value)} 
@@ -132,7 +132,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
               </div>
 
               <div className="space-y-3">
-                <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Success Acknowledgment</Label>
+                <Label className="text-[11px] font-bold tracking-wider text-slate-400">Success Acknowledgment</Label>
                 <Textarea 
                   value={successMessage} 
                   onChange={e => setSuccessMessage(e.target.value)} 
@@ -142,7 +142,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
               </div>
 
               <div className="space-y-3 p-6 rounded-3xl bg-primary/5 border border-primary/10">
-                <Label className="text-[11px] font-bold uppercase tracking-wider text-primary flex items-center gap-2 mb-2">
+                <Label className="text-[11px] font-bold tracking-wider text-primary flex items-center gap-2 mb-2">
                   <FileText className="w-4 h-4" /> Admission PDF Declaration
                 </Label>
                 <Textarea 
@@ -151,7 +151,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
                   placeholder="e.g. I hereby declare that all information is correct..." 
                   className="min-h-[100px] rounded-2xl border-slate-200 dark:border-slate-800 focus:ring-primary/20 transition-all font-medium bg-white dark:bg-zinc-950"
                 />
-                <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase italic">This text appears at the bottom of the generated application PDF.</p>
+                <p className="text-[10px] font-bold text-slate-400 mt-2 italic">This text appears at the bottom of the generated application PDF.</p>
               </div>
             </CardContent>
           </Card>
@@ -244,7 +244,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
         </CardHeader>
         <CardContent className="p-8">
           {customFields.length === 0 ? (
-            <div className="text-center py-12 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
+<div className="text-center py-12 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
               <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4 text-slate-300">
                 <Plus className="w-6 h-6" />
               </div>
@@ -258,13 +258,13 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
                     variant="ghost" 
                     size="icon" 
                     onClick={() => removeCustomField(field.id)} 
-                    className="absolute top-4 right-4 text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="absolute top-4 right-4 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                   
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Field Label</Label>
+                    <Label className="text-[10px] font-bold tracking-widest text-slate-400">Field Label</Label>
                     <Input 
                       value={field.label} 
                       onChange={(e) => updateCustomField(field.id, { label: e.target.value })} 
@@ -274,7 +274,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Type</Label>
+                      <Label className="text-[10px] font-bold tracking-widest text-slate-400">Type</Label>
                       <Select 
                         value={field.type} 
                         onValueChange={(v) => updateCustomField(field.id, { type: v })}
@@ -290,7 +290,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
                       </Select>
                     </div>
                     <div className="flex items-end pb-1.5">
-                      <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-2 rounded-xl border w-full justify-between px-3">
+                      <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800 w-full justify-between px-3">
                         <Label className="text-xs font-bold text-slate-600">Required</Label>
                         <Switch 
                           checked={field.required} 
@@ -302,7 +302,7 @@ export default function AdmissionConfigClient({ workspaceId, config }: { workspa
 
                   {field.type === "select" && (
                     <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-                      <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Options (Comma separated)</Label>
+                      <Label className="text-[10px] font-bold tracking-widest text-slate-400">Options (Comma separated)</Label>
                       <Input 
                         placeholder="Option 1, Option 2, Option 3" 
                         value={field.options} 

@@ -69,8 +69,8 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
                 </div>
               )}
               <div>
-                <h2 className="text-xl font-black text-slate-900">{workspaceName}</h2>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Student Admission Portal</p>
+                <h2 className="text-xl font-bold text-slate-900">{workspaceName}</h2>
+                <p className="text-xs font-bold text-slate-500 tracking-widest">Student Admission Portal</p>
               </div>
            </div>
            <Button variant="ghost" className="rounded-xl font-bold text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => setApplication(null)}>
@@ -84,11 +84,11 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
               <CardHeader className="bg-slate-900 text-white pb-10">
                  <div className="flex justify-between items-start">
                     <div>
-                       <CardTitle className="text-2xl font-black tracking-tight">Application Status</CardTitle>
+                       <CardTitle className="text-2xl font-bold tracking-tight">Application Status</CardTitle>
                        <CardDescription className="text-slate-400 font-medium">Tracking your enrollment progress</CardDescription>
                     </div>
                     <div className={cn(
-                      "px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest flex items-center gap-2",
+                      "px-4 py-2 rounded-xl font-bold text-xs tracking-widest flex items-center gap-2",
                       application.status === "APPROVED" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" :
                       application.status === "REJECTED" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
                       "bg-amber-500/20 text-amber-400 border border-amber-500/30"
@@ -107,18 +107,18 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
                           <Image src={application.photoUrl} alt="Photo" fill className="object-cover" />
                        </div>
                        <div>
-                          <h3 className="text-2xl font-black text-slate-900 leading-tight">{application.fullName}</h3>
+                          <h3 className="text-2xl font-bold text-slate-900 leading-tight">{application.fullName}</h3>
                           <p className="text-slate-500 font-bold">{application.appliedCourse}</p>
                        </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                          <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Application ID</p>
+                          <p className="text-[10px] font-bold text-slate-400 mb-1">Application ID</p>
                           <p className="font-bold text-slate-900">{application.applicationNo}</p>
                        </div>
                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                          <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Submission Date</p>
+                          <p className="text-[10px] font-bold text-slate-400 mb-1">Submission Date</p>
                           <p className="font-bold text-slate-900">{new Date(application.createdAt).toLocaleDateString()}</p>
                        </div>
                     </div>
@@ -141,7 +141,7 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
                             <p className="text-emerald-700 text-sm leading-relaxed">Your application has been approved. You can now access your student portal using the button below.</p>
                          </div>
                          <Link href={`${workspaceBase}/student/dashboard`}>
-                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl px-6">
+                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl px-6">
                                Go to Student Portal
                             </Button>
                          </Link>
@@ -155,7 +155,7 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
            <div className="space-y-6">
               <Card className="rounded-3xl border-none shadow-xl bg-white overflow-hidden">
                  <CardHeader className="pb-4">
-                    <CardTitle className="text-lg font-black tracking-tight">Quick Actions</CardTitle>
+                    <CardTitle className="text-lg font-bold tracking-tight">Quick Actions</CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-3">
                     <Link href={`${workspaceBase}/admission/print/${application.id}`} target="_blank" className="block w-full">
@@ -170,9 +170,9 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
               </Card>
 
               <Card className="rounded-3xl border-none shadow-xl bg-primary/5 border-primary/10 overflow-hidden p-6">
-                 <h4 className="text-primary font-black text-sm uppercase mb-2">Need Help?</h4>
+                 <h4 className="text-primary font-bold text-sm mb-2">Need Help?</h4>
                  <p className="text-xs font-bold text-slate-500 leading-relaxed mb-4">If you have any questions regarding your admission status, please contact our help desk.</p>
-                 <Button variant="link" className="p-0 h-auto text-primary font-black text-xs uppercase tracking-widest">Contact Office →</Button>
+                 <Button variant="link" className="p-0 h-auto text-primary font-bold text-xs tracking-widest">Contact Office →</Button>
               </Card>
            </div>
         </div>
@@ -188,13 +188,13 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
              <Image src={logoUrl} alt="Logo" fill className="object-contain" />
            </div>
         )}
-        <CardTitle className="text-3xl font-black tracking-tight text-slate-900">Admission Status</CardTitle>
-        <CardDescription className="font-bold text-slate-500 mt-2 uppercase tracking-widest text-[10px]">Track your enrollment progress</CardDescription>
+        <CardTitle className="text-3xl font-bold tracking-tight text-slate-900">Admission Status</CardTitle>
+        <CardDescription className="font-bold text-slate-500 mt-2 tracking-widest text-[10px]">Track your enrollment progress</CardDescription>
       </CardHeader>
       <CardContent className="px-8 pb-8">
         <form onSubmit={handleLogin} className="space-y-5">
           <div className="space-y-2">
-            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Application ID</Label>
+            <Label className="text-[10px] font-bold tracking-[0.2em] text-slate-400 ml-1">Application ID</Label>
             <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
               <Input 
@@ -207,7 +207,7 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Temporary Password</Label>
+            <Label className="text-[10px] font-bold tracking-[0.2em] text-slate-400 ml-1">Temporary Password</Label>
             <Input 
               type="password"
               placeholder="••••••••" 
@@ -218,7 +218,7 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
             />
           </div>
           <Button 
-            className="w-full h-14 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs hover:bg-slate-800 shadow-xl shadow-slate-200 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:scale-100"
+            className="w-full h-14 rounded-2xl bg-slate-900 text-white font-bold tracking-widest text-xs hover:bg-slate-800 shadow-xl shadow-slate-200 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:scale-100"
             disabled={loading}
             type="submit"
           >
@@ -227,7 +227,7 @@ export function AdmissionStatusClient({ workspaceId, workspaceName, logoUrl }: a
         </form>
       </CardContent>
       <CardFooter className="bg-slate-50 p-6 flex justify-center border-t border-slate-100">
-         <p className="text-xs font-bold text-slate-400">Lost your credentials? <Button variant="link" className="p-0 h-auto text-[10px] font-black uppercase tracking-widest ml-1">Contact Office</Button></p>
+         <p className="text-xs font-bold text-slate-400">Lost your credentials? <Button variant="link" className="p-0 h-auto text-[10px] font-bold ml-1">Contact Office</Button></p>
       </CardFooter>
     </Card>
   );

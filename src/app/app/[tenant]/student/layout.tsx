@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { CustomThemeStyle } from "@/components/providers/CustomThemeStyle";
+import { getServerTenantLink } from "@/lib/routing-server";
 
 export default async function StudentLayout({
   children,
@@ -18,7 +19,9 @@ export default async function StudentLayout({
   const { tenant } = await params;
 
   if (!session) {
-    redirect(`/login?callbackUrl=/student/dashboard`);
+    const loginUrl = await getServerTenantLink("/login", tenant);
+    const callbackUrl = await getServerTenantLink("/student/dashboard", tenant);
+    redirect(`${loginUrl}?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
   const workspace = await db.workspace.findUnique({
@@ -27,6 +30,8 @@ export default async function StudentLayout({
   });
 
   if (!workspace) redirect("/");
+
+  const homeHref = await getServerTenantLink("/", tenant);
 
   return (
     <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300">
@@ -45,7 +50,7 @@ export default async function StudentLayout({
             {workspace.name}
           </div>
           <div className="hidden lg:flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-            <Link href="/" className="hover:text-primary transition-colors">Workspace Home</Link>
+            <Link href={homeHref} className="hover:text-primary transition-colors">Workspace Home</Link>
             <span className="opacity-30">/</span>
             <span className="text-foreground">Student Portal</span>
           </div>

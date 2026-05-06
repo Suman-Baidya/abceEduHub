@@ -72,7 +72,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
         {/* Top Newsletter Section - Now exclusive to Workspace institutes */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pb-20 border-b border-white/5 mb-20">
           <div className="space-y-4">
-             <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+             <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">
                Stay ahead with our <span className="text-primary">educational</span> insights
              </h3>
              <p className="text-zinc-400 font-medium text-lg">Join 5,000+ learners receiving weekly updates and career tips.</p>
@@ -85,7 +85,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
                   className="h-14 pl-12 rounded-2xl bg-white/5 border-white/10 text-white placeholder:text-zinc-600 focus:ring-primary/20 focus:border-primary/40 transition-all"
                 />
              </div>
-             <Button className="h-14 px-8 rounded-2xl font-black bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all border-none">
+             <Button className="h-14 px-8 rounded-2xl font-bold bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all border-none">
                Subscribe <Send className="w-4 h-4 ml-2" />
              </Button>
           </div>
@@ -103,12 +103,12 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
                     className="object-contain p-1"
                   />
                 ) : (
-                  <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center font-black text-xl uppercase">
+                  <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl">
                     {siteName.charAt(0)}
                   </div>
                 )}
               </div>
-              <span className="text-2xl font-black tracking-tighter text-white group-hover:text-primary transition-colors">
+              <span className="text-2xl font-bold tracking-tighter text-white group-hover:text-primary transition-colors">
                 {siteName}
               </span>
             </Link>
@@ -147,7 +147,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
           {/* Quick Links */}
           <div className="space-y-8">
             <div className="relative w-fit">
-              <h4 className="text-white font-black text-xs uppercase tracking-[0.2em]">Quick Links</h4>
+              <h4 className="text-white font-bold text-xs tracking-[0.2em]">Quick Links</h4>
               <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
             </div>
             <div className="flex flex-col gap-4">
@@ -166,7 +166,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
           {/* Support Links */}
           <div className="space-y-8">
             <div className="relative w-fit">
-              <h4 className="text-white font-black text-xs uppercase tracking-[0.2em]">Support</h4>
+              <h4 className="text-white font-bold text-xs tracking-[0.2em]">Support</h4>
               <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
             </div>
             <div className="flex flex-col gap-4">
@@ -190,7 +190,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
           {/* Contact Column */}
           <div className="space-y-8">
             <div className="relative w-fit">
-              <h4 className="text-white font-black text-xs uppercase tracking-[0.2em]">Contact Us</h4>
+              <h4 className="text-white font-bold text-xs tracking-[0.2em]">Contact Us</h4>
               <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
             </div>
             <div className="space-y-6">
@@ -207,7 +207,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <PhoneCall className="w-4 h-4 text-primary" />
                   </div>
-                  <Link href={`tel:${contactPhone}`} className="text-white font-black text-sm hover:text-primary transition-colors">{contactPhone}</Link>
+                  <Link href={`tel:${contactPhone}`} className="text-white font-bold text-sm hover:text-primary transition-colors">{contactPhone}</Link>
                 </div>
               )}
               {contactEmail && (
@@ -215,7 +215,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     <Mail className="w-4 h-4 text-primary" />
                   </div>
-                  <Link href={`mailto:${contactEmail}`} className="text-white font-black text-sm hover:text-primary transition-colors">{contactEmail}</Link>
+                  <Link href={`mailto:${contactEmail}`} className="text-white font-bold text-sm hover:text-primary transition-colors">{contactEmail}</Link>
                 </div>
               )}
             </div>
@@ -224,7 +224,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
 
         {/* Bottom Bar */}
         <div className="mt-24 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6 text-[11px] font-black uppercase tracking-widest text-zinc-500">
+          <div className="flex items-center gap-6 text-[11px] font-bold tracking-widest text-zinc-500">
             <p>© {new Date().getFullYear()} {siteName}. All Rights Reserved.</p>
             <div className="hidden md:flex items-center gap-2 text-primary">
                <ShieldCheck className="w-4 h-4" />
@@ -233,7 +233,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
           </div>
           
           <div className="flex items-center gap-6">
-             <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-zinc-500">
+             <div className="flex items-center gap-2 text-[11px] font-bold tracking-widest text-zinc-500">
                 <Globe className="w-4 h-4 text-primary" />
                 <span>Authorized Center</span>
              </div>
@@ -241,7 +241,7 @@ export function WorkspaceFooter({ settings, tenant: propTenant, user }: { settin
                 <Link 
                   href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} 
                   target="_blank"
-                  className="flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-500 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
+                  className="flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-500 rounded-full text-[10px] font-bold tracking-widest hover:bg-green-500 hover:text-white transition-all border border-green-500/20"
                 >
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   Live Support
