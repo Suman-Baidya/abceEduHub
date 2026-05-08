@@ -37,10 +37,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function CourseList({ 
   workspaceId, 
-  initialCourses 
+  initialCourses,
+  tenant
 }: { 
   workspaceId: string; 
   initialCourses: any[];
+  tenant: string;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

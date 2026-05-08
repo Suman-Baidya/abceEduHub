@@ -224,7 +224,7 @@ export default function BatchManagement({
               <Label className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">Assign Course</Label>
               <Select 
                 value={formData.courseId} 
-                onValueChange={(val) => setFormData({ ...formData, courseId: val })}
+                onValueChange={(val) => setFormData({ ...formData, courseId: val as string })}
               >
                 <SelectTrigger className="h-12 rounded-2xl font-bold">
                   <SelectValue placeholder="Select a course" />
