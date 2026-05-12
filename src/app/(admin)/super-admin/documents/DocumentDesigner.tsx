@@ -218,9 +218,16 @@ export default function DocumentDesigner() {
   const downloadPDF = async () => {
     if (!canvasRef.current) return;
     
+    const wasPreview = isPreview;
+    // Force preview mode for clean PDF capture (removes guides and UI rings)
+    setIsPreview(true);
+    
     const toastId = toast.loading("Rendering High-Resolution Document...");
     
     try {
+      // Wait for React to render the preview state
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // 1. Ensure all images are loaded
       const images = canvasRef.current.querySelectorAll("img");
       await Promise.all(Array.from(images).map(img => {
@@ -266,6 +273,8 @@ export default function DocumentDesigner() {
     } catch (error) {
       console.error(error);
       toast.error("PDF engine failure. Check image CORS settings.", { id: toastId });
+    } finally {
+      setIsPreview(wasPreview);
     }
   };
 
@@ -701,19 +710,19 @@ export default function DocumentDesigner() {
         {/* Canvas Area */}
         <div className="xl:col-span-9 flex flex-col items-center">
           <div className="w-full overflow-auto p-10 bg-slate-100 dark:bg-zinc-950 rounded-[3rem] border-2 border-slate-200 dark:border-zinc-800 shadow-inner min-h-[800px] flex justify-start">
-            <div 
-              ref={canvasRef}
-              className="relative bg-white shadow-2xl overflow-hidden shrink-0 m-auto"
-              style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
-            >
-              {backgroundUrl ? (
-                <img src={backgroundUrl || ""} crossOrigin="anonymous" alt="BG" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-200 bg-slate-50/50">
-                   <Layout className="w-32 h-32 opacity-20" />
-                   <p className="font-black uppercase tracking-[0.2em] mt-4">Empty Canvas</p>
-                </div>
-              )}
+            <div className="relative shadow-2xl shrink-0 m-auto" style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}>
+              <div 
+                ref={canvasRef}
+                className="relative bg-white overflow-hidden w-full h-full"
+              >
+                {backgroundUrl ? (
+                  <img src={backgroundUrl || ""} crossOrigin="anonymous" alt="BG" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ backgroundColor: "rgba(248, 250, 252, 0.5)", color: "#94a3b8" }}>
+                     <Layout className="w-32 h-32" style={{ opacity: 0.2 }} />
+                     <p className="font-black uppercase tracking-[0.2em] mt-4">Empty Canvas</p>
+                  </div>
+                )}
 
               {/* Bleed/Safe Area Guide (Visual Only) */}
               {!isPreview && (
@@ -738,11 +747,19 @@ export default function DocumentDesigner() {
                       {isPreview ? (DEMO_DATA[v.name] || `{${v.name}}`) : `{${v.name}}`}
                     </span>
                   ) : (
-                    <div style={{ width: `${v.width}px`, height: `${v.height}px` }} className="bg-slate-100/50 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden">
+                    <div 
+                      style={{ 
+                        width: `${v.width}px`, 
+                        height: `${v.height}px`,
+                        backgroundColor: !isPreview ? "rgba(241, 245, 249, 0.5)" : "transparent",
+                        border: !isPreview ? "2px dashed #cbd5e1" : "none"
+                      }} 
+                      className="flex items-center justify-center overflow-hidden"
+                    >
                       {isPreview ? (
                         <img src={DEMO_DATA[v.name] || ""} crossOrigin="anonymous" className="w-full h-full object-contain" />
                       ) : (
-                        <div className="flex flex-col items-center gap-1 opacity-40">
+                        <div className="flex flex-col items-center gap-1" style={{ opacity: 0.4 }}>
                           {v.type === "image" ? <ImageIcon className="h-6 w-6" /> : <Signature className="h-6 w-6" />}
                         </div>
                       )}
@@ -750,6 +767,7 @@ export default function DocumentDesigner() {
                   )}
                 </div>
               ))}
+            </div>
             </div>
           </div>
           <div className="mt-8 flex items-center gap-8">
